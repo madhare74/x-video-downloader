@@ -62,16 +62,15 @@ class MainUiTest {
 
         composeRule.onNodeWithTag(Tags.AUTHOR).assertIsDisplayed()
         composeRule.onNodeWithText("@NASA").assertIsDisplayed()
-        val list = composeRule.onNodeWithTag(Tags.RESULT_LIST)
         val best = "${NASA_ID}_1_1920x1080"
-        list.performScrollToNode(hasTestTag(Tags.quality(best)))
-        composeRule.onNodeWithText("1920×1080 · 1080p").assertIsDisplayed()
-        composeRule.onNodeWithText("Лучшее качество").assertExists()
         composeRule.onNodeWithText("0:45").assertExists()
-        list.performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_480x270")))
+        composeRule.scrollIntoView(Tags.quality(best))
+        composeRule.onNodeWithText("1920×1080 · 1080p").assertIsDisplayed()
+        composeRule.onNodeWithText("Лучшее качество").assertIsDisplayed()
+        composeRule.scrollIntoView(Tags.quality("${NASA_ID}_1_480x270"))
         composeRule.onNodeWithText("480×270 · 270p").assertIsDisplayed()
 
-        list.performScrollToNode(hasTestTag(Tags.download(best)))
+        composeRule.scrollIntoView(Tags.download(best))
         composeRule.onNodeWithTag(Tags.download(best)).performClick()
         composeRule.waitForIdle()
         assertEquals(1, scheduler.enqueued.size)

@@ -84,18 +84,7 @@ class ScreenshotTest {
     @Test fun result_scale200_light() { launch(2.0f, false, searched(NASA_LINK)); save("result_scale200_light") }
 
     /** Прокрутка к строке качества, чтобы на снимке были варианты и состояния скачивания. */
-    private fun scrollTo(variant: String) {
-        val list = composeRule.onNodeWithTag(Tags.RESULT_LIST)
-        list.performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_$variant")))
-        // Карточка видео — один элемент списка; докручиваем, пока строка не окажется на экране.
-        repeat(8) {
-            val row = composeRule.onNodeWithTag(Tags.quality("${NASA_ID}_1_$variant")).fetchSemanticsNode().boundsInRoot
-            val root = composeRule.onRoot().fetchSemanticsNode().boundsInRoot
-            if (row.bottom <= root.bottom - root.height * 0.15f) return
-            list.performTouchInput { swipeUp(startY = centerY + height / 4f, endY = centerY - height / 4f) }
-            composeRule.waitForIdle()
-        }
-    }
+    private fun scrollTo(variant: String) = composeRule.scrollIntoView(Tags.quality("${NASA_ID}_1_$variant"))
 
     @Test fun qualities_scale100_light() {
         launch(1.0f, false, searched(NASA_LINK)); scrollTo("480x270"); save("qualities_scale100_light")

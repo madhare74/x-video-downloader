@@ -67,7 +67,7 @@ class ShareIntentTest {
                 composeRule.onAllNodesWithTag(Tags.AUTHOR).fetchSemanticsNodes().isNotEmpty()
             }
             composeRule.onNodeWithText("@NASA").assertIsDisplayed()
-            composeRule.onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_1920x1080")))
+            composeRule.scrollIntoView(Tags.quality("${NASA_ID}_1_1920x1080"))
             composeRule.onNodeWithText("1920×1080 · 1080p").assertIsDisplayed()
         } finally {
             activity.finish()
@@ -125,7 +125,7 @@ class DownloadTest {
         composeRule.onNodeWithTag(Tags.INPUT).performTextInput("https://x.com/tester/status/$postId")
         composeRule.onNodeWithTag(Tags.SEARCH).performClick()
         val key = DownloadRequest.key(postId, 1, variant)
-        composeRule.onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(Tags.download(key)))
+        composeRule.scrollIntoView(Tags.download(key))
         composeRule.onNodeWithTag(Tags.download(key)).performClick()
 
         composeRule.waitUntil(30_000) {
