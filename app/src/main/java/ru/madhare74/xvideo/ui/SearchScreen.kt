@@ -291,6 +291,7 @@ private fun Badge(text: String) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun QualityRow(
     variant: VideoVariant,
@@ -308,8 +309,14 @@ private fun QualityRow(
         modifier = Modifier.fillMaxWidth().testTag(Tags.quality(downloadKey)),
     ) {
         Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
+            // При крупном шрифте кнопка переносится под описание, а не сжимает его.
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                itemVerticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.padding(end = 8.dp)) {
                     Text(
                         variant.resolution + if (variant.height > 0) " · ${variant.height}p" else "",
                         style = MaterialTheme.typography.bodyLarge,
@@ -325,7 +332,6 @@ private fun QualityRow(
                 }
                 val busy = state is DownloadState.Running || state is DownloadState.Queued
                 if (!busy) {
-                    Spacer(Modifier.width(8.dp))
                     val label = if (state is DownloadState.Done) "Ещё раз" else "Скачать"
                     if (best && state !is DownloadState.Done) {
                         Button(onClick = onDownload, modifier = Modifier.testTag(Tags.download(downloadKey))) { Text(label) }

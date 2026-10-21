@@ -8,6 +8,8 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
@@ -83,7 +85,16 @@ class ScreenshotTest {
 
     /** Прокрутка к строке качества, чтобы на снимке были варианты и состояния скачивания. */
     private fun scrollTo(variant: String) {
-        composeRule.onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_$variant")))
+        val list = composeRule.onNodeWithTag(Tags.RESULT_LIST)
+        list.performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_$variant")))
+        // Карточка видео — один элемент списка; докручиваем, пока строка не окажется на экране.
+        repeat(8) {
+            val row = composeRule.onNodeWithTag(Tags.quality("${NASA_ID}_1_$variant")).fetchSemanticsNode().boundsInRoot
+            val root = composeRule.onRoot().fetchSemanticsNode().boundsInRoot
+            if (row.bottom <= root.bottom - root.height * 0.15f) return
+            list.performTouchInput { swipeUp(startY = centerY + height / 4f, endY = centerY - height / 4f) }
+            composeRule.waitForIdle()
+        }
     }
 
     @Test fun qualities_scale100_light() {
