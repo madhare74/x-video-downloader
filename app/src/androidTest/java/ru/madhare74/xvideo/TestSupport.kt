@@ -3,10 +3,8 @@ package ru.madhare74.xvideo
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.swipeUp
 import androidx.test.platform.app.InstrumentationRegistry
 import ru.madhare74.xvideo.ui.Tags
 import kotlinx.coroutines.flow.Flow
@@ -84,14 +82,8 @@ const val NASA_ID = "1849012345678901234"
  * списка и может быть выше экрана, поэтому после прокрутки к ней докручиваем жестом.
  */
 fun ComposeTestRule.scrollIntoView(tag: String) {
-    val list = onNodeWithTag(Tags.RESULT_LIST)
-    list.performScrollToNode(hasTestTag(tag))
-    repeat(10) {
-        waitForIdle()
-        val node = onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
-        val root = onRoot().fetchSemanticsNode().boundsInRoot
-        if (node.bottom <= root.bottom - root.height * 0.15f) return
-        list.performTouchInput { swipeUp(startY = centerY + height / 4f, endY = centerY - height / 4f) }
-    }
+    onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(tag))
+    waitForIdle()
+    onNodeWithTag(tag).performScrollTo()
     waitForIdle()
 }
