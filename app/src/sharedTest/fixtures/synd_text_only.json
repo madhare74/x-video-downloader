@@ -1,0 +1,1 @@
+{"__typename":"Tweet","lang":"en","created_at":"2026-10-16T10:00:00.000Z","id_str":"1848400000000000124","text":"Hello world, no media here.","user":{"id_str":"9","name":"Text Person","screen_name":"text_person"},"isEdited":false,"isStaleEdit":false}

@@ -1,0 +1,147 @@
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Сборка и unit-тесты
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit-тесты и сборка APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --stacktrace testDebugUnitTest assembleDebug 2>&1 | tee build.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Отчёт unit-тестов
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-report
+          path: app/build/reports/tests/
+          if-no-files-found: ignore
+
+      - name: APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-video-downloader-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      # APK и результаты тестов дополнительно кладутся в ветку `apk`,
+      # чтобы их можно было забрать обычным git без доступа к хранилищу артефактов.
+      - name: Опубликовать APK в ветку apk
+        if: github.event_name != 'pull_request'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/debug/app-debug.apk out/x-video-downloader-debug.apk
+          cp -r app/build/test-results/testDebugUnitTest out/unit-test-results
+          echo "${GITHUB_SHA}" > out/COMMIT
+          cd out
+          git init -q -b apk
+          git add .
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "APK ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" apk
+
+      - name: Опубликовать лог сборки при ошибке
+        if: failure() && github.event_name != 'pull_request'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p logs && cp build.log logs/ || true
+          cp -r app/build/test-results logs/ || true
+          echo "${GITHUB_SHA}" > logs/COMMIT
+          cd logs && git init -q -b ci-logs-build && git add . && \
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "log ${GITHUB_SHA::7}" && \
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-build
+
+  ui-tests:
+    name: UI-тесты на эмуляторе
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Включить KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Собрать тестовые APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --stacktrace assembleDebug assembleDebugAndroidTest 2>&1 | tee assemble.log
+          exit ${PIPESTATUS[0]}
+
+      - name: UI-тесты
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          target: default
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            ./gradlew --stacktrace connectedDebugAndroidTest > app/build/connected.log 2>&1 || (tail -100 app/build/connected.log; exit 1)
+            adb install -r app/build/outputs/apk/debug/app-debug.apk > app/build/shots.log 2>&1 || true
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk >> app/build/shots.log 2>&1 || true
+            adb shell am instrument -w -e class ru.madhare74.xvideo.ScreenshotTest ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
+            mkdir -p app/build/screenshots
+            adb exec-out run-as ru.madhare74.xvideo tar -c files/screenshots > app/build/shots.tar 2>> app/build/shots.log || true
+            tar -xf app/build/shots.tar -C app/build/screenshots --strip-components=2 >> app/build/shots.log 2>&1 || true
+
+      - name: Отчёт UI-тестов
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-report
+          path: app/build/reports/androidTests/
+          if-no-files-found: ignore
+
+      - name: Опубликовать результаты UI-тестов в ветку ui-test-results
+        if: always() && github.event_name != 'pull_request'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out
+          cp -r app/build/outputs/androidTest-results/connected out/ || true
+          cp -r app/build/screenshots out/ || true
+          cp app/build/shots.log out/ || true
+          cp app/build/connected.log assemble.log out/ || true
+          echo "${GITHUB_SHA}" > out/COMMIT
+          cd out
+          git init -q -b ui-test-results
+          git add .
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "UI tests ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ui-test-results

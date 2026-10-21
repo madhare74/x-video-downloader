@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Кадр плёнки со стрелкой вниз. Холст 108x108, безопасная зона 66x66 в центре. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- рамка кадра -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineJoin="round"
+        android:pathData="M33,32h42v34h-42z" />
+    <!-- кнопка воспроизведения -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,40l14,9l-14,9z" />
+    <!-- стрелка скачивания -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#1D9BF0"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M54,64v13M47,71l7,7l7,-7" />
+</vector>
