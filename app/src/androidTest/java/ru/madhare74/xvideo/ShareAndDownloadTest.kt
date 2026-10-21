@@ -14,7 +14,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
-import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import okhttp3.mockwebserver.MockResponse
@@ -60,13 +59,18 @@ class ShareIntentTest {
             .setAction(Intent.ACTION_SEND)
             .setType("text/plain")
             .putExtra(Intent.EXTRA_TEXT, "https://x.com/NASA/status/1849012345678901234?s=46&t=abc")
-        ActivityScenario.launch<MainActivity>(intent).use {
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // Так же, как система открывает приложение из меню «Поделиться».
+        val activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent)
+        try {
             composeRule.waitUntil(15_000) {
                 composeRule.onAllNodesWithTag(Tags.AUTHOR).fetchSemanticsNodes().isNotEmpty()
             }
             composeRule.onNodeWithText("@NASA").assertIsDisplayed()
             composeRule.onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_1920x1080")))
             composeRule.onNodeWithText("1920×1080 · 1080p").assertIsDisplayed()
+        } finally {
+            activity.finish()
         }
     }
 }

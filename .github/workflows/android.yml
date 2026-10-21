@@ -113,7 +113,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            ./gradlew --stacktrace connectedDebugAndroidTest > app/build/connected.log 2>&1 || (tail -100 app/build/connected.log; exit 1)
+            ./gradlew --stacktrace connectedDebugAndroidTest > app/build/connected.log 2>&1 || (adb logcat -d > app/build/logcat.txt 2>&1; tail -100 app/build/connected.log; exit 1)
             adb install -r app/build/outputs/apk/debug/app-debug.apk > app/build/shots.log 2>&1 || true
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk >> app/build/shots.log 2>&1 || true
             adb shell am instrument -w -e class ru.madhare74.xvideo.ScreenshotTest ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
@@ -139,6 +139,7 @@ jobs:
           cp -r app/build/screenshots out/ || true
           cp app/build/shots.log out/ || true
           cp app/build/connected.log assemble.log out/ || true
+          cp app/build/logcat.txt out/ || true
           echo "${GITHUB_SHA}" > out/COMMIT
           cd out
           git init -q -b ui-test-results
