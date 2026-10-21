@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -105,7 +106,17 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(if (state.tab == Tab.Search) "Загрузчик видео X" else "История загрузок") }) },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        if (state.tab == Tab.Search) "Загрузчик видео X" else "История загрузок",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+            )
+        },
         snackbarHost = { SnackbarHost(snackbar) },
         bottomBar = {
             NavigationBar {

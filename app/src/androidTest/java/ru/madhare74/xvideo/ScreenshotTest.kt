@@ -5,6 +5,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.Density
@@ -17,6 +20,7 @@ import ru.madhare74.xvideo.download.DownloadState
 import ru.madhare74.xvideo.history.HistoryItem
 import ru.madhare74.xvideo.ui.MainViewModel
 import ru.madhare74.xvideo.ui.Tab
+import ru.madhare74.xvideo.ui.Tags
 import ru.madhare74.xvideo.ui.XApp
 import ru.madhare74.xvideo.ui.XTheme
 import java.io.File
@@ -75,11 +79,40 @@ class ScreenshotTest {
 
     @Test fun result_scale100_dark() { launch(1.0f, true, searched(NASA_LINK)); save("result_scale100_dark") }
 
-    @Test fun result_scale150_dark() { launch(1.5f, true, searched(NASA_LINK)); save("result_scale150_dark") }
-
     @Test fun result_scale200_light() { launch(2.0f, false, searched(NASA_LINK)); save("result_scale200_light") }
 
-    @Test fun result_scale200_dark() { launch(2.0f, true, searched(NASA_LINK)); save("result_scale200_dark") }
+    /** Прокрутка к строке качества, чтобы на снимке были варианты и состояния скачивания. */
+    private fun scrollTo(variant: String) {
+        composeRule.onNodeWithTag(Tags.RESULT_LIST).performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_$variant")))
+    }
+
+    @Test fun qualities_scale100_light() {
+        launch(1.0f, false, searched(NASA_LINK)); scrollTo("480x270"); save("qualities_scale100_light")
+    }
+
+    @Test fun qualities_scale100_dark() {
+        launch(1.0f, true, searched(NASA_LINK)); scrollTo("480x270"); save("qualities_scale100_dark")
+    }
+
+    @Test fun qualities_top_scale150_dark() {
+        launch(1.5f, true, searched(NASA_LINK)); scrollTo("1280x720"); save("qualities_top_scale150_dark")
+    }
+
+    @Test fun qualities_bottom_scale150_light() {
+        launch(1.5f, false, searched(NASA_LINK)); scrollTo("480x270"); save("qualities_bottom_scale150_light")
+    }
+
+    @Test fun qualities_top_scale200_dark() {
+        launch(2.0f, true, searched(NASA_LINK)); scrollTo("1920x1080"); save("qualities_top_scale200_dark")
+    }
+
+    @Test fun qualities_mid_scale200_light() {
+        launch(2.0f, false, searched(NASA_LINK)); scrollTo("1280x720"); save("qualities_mid_scale200_light")
+    }
+
+    @Test fun qualities_bottom_scale200_dark() {
+        launch(2.0f, true, searched(NASA_LINK)); scrollTo("480x270"); save("qualities_bottom_scale200_dark")
+    }
 
     @Test fun multi_scale150_light() {
         launch(1.5f, false, searched("https://x.com/test_channel/status/1849500000000000001"))
