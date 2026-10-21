@@ -1,4 +1,4 @@
-package ru.madhere74.xvideo.download
+package ru.madhare74.xvideo.download
 
 import android.content.Context
 import android.content.pm.ServiceInfo
