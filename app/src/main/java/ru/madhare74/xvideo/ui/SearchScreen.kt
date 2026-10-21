@@ -314,9 +314,8 @@ private fun QualityRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalArrangement = Arrangement.spacedBy(6.dp),
-                itemVerticalAlignment = Alignment.CenterVertically,
             ) {
-                Column(Modifier.padding(end = 8.dp)) {
+                Column(Modifier.padding(end = 8.dp).align(Alignment.CenterVertically)) {
                     Text(
                         variant.resolution + if (variant.height > 0) " · ${variant.height}p" else "",
                         style = MaterialTheme.typography.bodyLarge,
@@ -334,9 +333,9 @@ private fun QualityRow(
                 if (!busy) {
                     val label = if (state is DownloadState.Done) "Ещё раз" else "Скачать"
                     if (best && state !is DownloadState.Done) {
-                        Button(onClick = onDownload, modifier = Modifier.testTag(Tags.download(downloadKey))) { Text(label) }
+                        Button(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { Text(label) }
                     } else {
-                        OutlinedButton(onClick = onDownload, modifier = Modifier.testTag(Tags.download(downloadKey))) { Text(label) }
+                        OutlinedButton(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { Text(label) }
                     }
                 }
             }
