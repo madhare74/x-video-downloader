@@ -107,7 +107,7 @@ fun SearchScreen(
                     OutlinedButton(onClick = onPaste, modifier = Modifier.testTag(Tags.PASTE)) {
                         Icon(painterResource(R.drawable.ic_paste), contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Вставить")
+                        FitText("Вставить")
                     }
                     Button(
                         onClick = onSearch,
@@ -116,7 +116,7 @@ fun SearchScreen(
                     ) {
                         Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Найти видео")
+                        FitText("Найти видео")
                     }
                 }
             }
@@ -181,11 +181,11 @@ private fun ClipboardCard(link: String, onAccept: () -> Unit, onDismiss: () -> U
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("В буфере обмена ссылка на X", fontWeight = FontWeight.SemiBold)
-            Text(link, style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            FitText("В буфере обмена ссылка на X", fontWeight = FontWeight.SemiBold)
+            Text(link, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onAccept, modifier = Modifier.testTag(Tags.CLIPBOARD_ACCEPT)) { Text("Подставить") }
-                TextButton(onClick = onDismiss) { Text("Не надо") }
+                Button(onClick = onAccept, modifier = Modifier.testTag(Tags.CLIPBOARD_ACCEPT)) { FitText("Подставить") }
+                TextButton(onClick = onDismiss) { FitText("Не надо") }
             }
         }
     }
@@ -203,7 +203,7 @@ private fun ErrorCard(error: AppError, onRetry: () -> Unit) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(Messages.text(error), style = MaterialTheme.typography.bodyLarge)
             if (Messages.canRetrySearch(error)) {
-                OutlinedButton(onClick = onRetry, modifier = Modifier.testTag(Tags.RETRY_SEARCH)) { Text("Повторить") }
+                OutlinedButton(onClick = onRetry, modifier = Modifier.testTag(Tags.RETRY_SEARCH)) { FitText("Повторить") }
             }
         }
     }
@@ -212,8 +212,8 @@ private fun ErrorCard(error: AppError, onRetry: () -> Unit) {
 @Composable
 private fun AuthorHeader(post: Post) {
     Column(Modifier.fillMaxWidth().testTag(Tags.AUTHOR), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(post.authorName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-        Text("@${post.screenName}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        FitText(post.authorName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        FitText("@${post.screenName}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         if (post.text.isNotBlank()) {
             Text(post.text, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
@@ -256,7 +256,7 @@ private fun VideoCard(
         }
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             val kind = if (video.isGif) "GIF" else "Видео"
-            Text(
+            FitText(
                 if (total > 1) "$kind ${video.index} из $total" else kind,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
@@ -280,7 +280,7 @@ private fun VideoCard(
 
 @Composable
 private fun Badge(text: String) {
-    Text(
+    FitText(
         text,
         color = Color.White,
         style = MaterialTheme.typography.labelMedium,
@@ -316,7 +316,7 @@ private fun QualityRow(
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Column(Modifier.padding(end = 8.dp).align(Alignment.CenterVertically)) {
-                    Text(
+                    FitText(
                         variant.resolution + if (variant.height > 0) " · ${variant.height}p" else "",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = if (best) FontWeight.SemiBold else FontWeight.Normal,
@@ -326,16 +326,16 @@ private fun QualityRow(
                         size?.let { RuFormat.megabytes(it) },
                     )
                     if (details.isNotEmpty()) {
-                        Text(details.joinToString(" · "), style = MaterialTheme.typography.bodySmall)
+                        FitText(details.joinToString(" · "), style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 val busy = state is DownloadState.Running || state is DownloadState.Queued
                 if (!busy) {
                     val label = if (state is DownloadState.Done) "Ещё раз" else "Скачать"
                     if (best && state !is DownloadState.Done) {
-                        Button(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { Text(label) }
+                        Button(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { FitText(label) }
                     } else {
-                        OutlinedButton(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { Text(label) }
+                        OutlinedButton(onClick = onDownload, modifier = Modifier.align(Alignment.CenterVertically).testTag(Tags.download(downloadKey))) { FitText(label) }
                     }
                 }
             }
@@ -353,7 +353,7 @@ private fun QualityRow(
                             } else {
                                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                             }
-                            Text(
+                            FitText(
                                 if (running == null || (running.done == 0L && running.total == null)) "Ожидание…"
                                 else RuFormat.progress(running.done, running.total),
                                 style = MaterialTheme.typography.bodySmall,
@@ -368,15 +368,15 @@ private fun QualityRow(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.testTag(Tags.downloadState(downloadKey)),
                 ) {
-                    Text("Сохранено", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.primary)
-                    TextButton(onClick = { onOpen(state.uri) }) { Text("Открыть") }
+                    FitText("Сохранено", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.primary)
+                    TextButton(onClick = { onOpen(state.uri) }) { FitText("Открыть") }
                 }
                 is DownloadState.Failed -> Column(
                     Modifier.testTag(Tags.downloadState(downloadKey)),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(Messages.text(state.error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-                    TextButton(onClick = onDownload, contentPadding = PaddingValues(0.dp)) { Text("Повторить") }
+                    TextButton(onClick = onDownload, contentPadding = PaddingValues(0.dp)) { FitText("Повторить") }
                 }
                 DownloadState.Cancelled, null -> Unit
             }

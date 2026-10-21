@@ -87,31 +87,26 @@ fun HistoryScreen(
                         }
                     }
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            item.authorName.ifBlank { "@${item.screenName}" },
-                            fontWeight = FontWeight.SemiBold,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Text("@${item.screenName}", style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        FitText(item.authorName.ifBlank { "@${item.screenName}" }, fontWeight = FontWeight.SemiBold)
+                        FitText("@${item.screenName}", style = MaterialTheme.typography.bodySmall)
                         val quality = buildList {
                             if (item.width > 0 && item.height > 0) add("${item.width}×${item.height}")
                             if (item.isGif) add("GIF")
                         }.joinToString(" · ")
-                        if (quality.isNotEmpty()) Text(quality, style = MaterialTheme.typography.bodySmall)
-                        Text(RuFormat.dateTime(item.savedAt), style = MaterialTheme.typography.bodySmall)
+                        if (quality.isNotEmpty()) FitText(quality, style = MaterialTheme.typography.bodySmall)
+                        FitText(RuFormat.dateTime(item.savedAt), style = MaterialTheme.typography.bodySmall)
                         if (gone) {
-                            Text("Файл удалён", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                            FitText("Файл удалён", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                         }
                     }
                 }
                 FlowRow(Modifier.padding(start = 4.dp, end = 4.dp, bottom = 4.dp)) {
                     if (gone) {
-                        TextButton(onClick = { onRemoveEntry(item.id) }) { Text("Убрать из списка") }
+                        TextButton(onClick = { onRemoveEntry(item.id) }) { FitText("Убрать из списка") }
                     } else {
-                        TextButton(onClick = { onOpen(item) }) { Text("Открыть") }
-                        TextButton(onClick = { onShare(item) }) { Text("Поделиться") }
-                        TextButton(onClick = { confirm = item }) { Text("Удалить") }
+                        TextButton(onClick = { onOpen(item) }) { FitText("Открыть") }
+                        TextButton(onClick = { onShare(item) }) { FitText("Поделиться") }
+                        TextButton(onClick = { confirm = item }) { FitText("Удалить") }
                     }
                 }
             }

@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -109,11 +108,7 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        if (state.tab == Tab.Search) "Загрузчик видео X" else "История загрузок",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    FitText(if (state.tab == Tab.Search) "Загрузчик видео X" else "История загрузок")
                 },
             )
         },
@@ -124,14 +119,14 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
                     selected = state.tab == Tab.Search,
                     onClick = { viewModel.selectTab(Tab.Search) },
                     icon = { Icon(painterResource(R.drawable.ic_download), contentDescription = null) },
-                    label = { Text("Скачать") },
+                    label = { FitText("Скачать") },
                     modifier = Modifier.testTag(Tags.TAB_SEARCH),
                 )
                 NavigationBarItem(
                     selected = state.tab == Tab.History,
                     onClick = { viewModel.selectTab(Tab.History) },
                     icon = { Icon(painterResource(R.drawable.ic_history), contentDescription = null) },
-                    label = { Text("История") },
+                    label = { FitText("История") },
                     modifier = Modifier.testTag(Tags.TAB_HISTORY),
                 )
             }
