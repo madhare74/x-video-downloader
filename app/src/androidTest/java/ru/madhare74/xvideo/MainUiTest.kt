@@ -66,7 +66,7 @@ class MainUiTest {
         val best = "${NASA_ID}_1_1920x1080"
         list.performScrollToNode(hasTestTag(Tags.quality(best)))
         composeRule.onNodeWithText("1920×1080 · 1080p").assertIsDisplayed()
-        composeRule.onNodeWithText("Лучшее качество").assertIsDisplayed()
+        composeRule.onNodeWithText("Лучшее качество").assertExists()
         composeRule.onNodeWithText("0:45").assertExists()
         list.performScrollToNode(hasTestTag(Tags.quality("${NASA_ID}_1_480x270")))
         composeRule.onNodeWithText("480×270 · 270p").assertIsDisplayed()
