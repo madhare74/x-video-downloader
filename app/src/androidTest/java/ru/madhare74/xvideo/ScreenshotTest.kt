@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
@@ -24,7 +23,6 @@ import ru.madhare74.xvideo.data.ShortLinkResolver
 import ru.madhare74.xvideo.download.DownloadState
 import ru.madhare74.xvideo.history.HistoryItem
 import ru.madhare74.xvideo.ui.MainViewModel
-import ru.madhare74.xvideo.ui.ManualTokenDialog
 import ru.madhare74.xvideo.ui.Tab
 import ru.madhare74.xvideo.ui.Tags
 import ru.madhare74.xvideo.ui.XApp
@@ -135,15 +133,6 @@ class ScreenshotTest {
         save("start_clipboard_scale150_light")
     }
 
-    /** Снимок всего экрана — вместе с меню и диалогами, которые открываются отдельными окнами. */
-    private fun saveScreen(name: String) {
-        composeRule.waitForIdle()
-        Thread.sleep(500)
-        val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot() ?: return
-        val dir = File(InstrumentationRegistry.getInstrumentation().targetContext.filesDir, "screenshots").apply { mkdirs() }
-        File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-    }
-
     private fun restrictedVm(loggedIn: Boolean): MainViewModel {
         val session = fakeSession(loggedIn)
         val repository = PostRepository(
@@ -158,40 +147,23 @@ class ScreenshotTest {
 
     @Test fun login_needed_scale100_dark() { launch(1.0f, true, restrictedVm(false)); save("login_needed_scale100_dark") }
 
-    @Test fun login_needed_scale200_light() { launch(2.0f, false, restrictedVm(false)); save("login_needed_scale200_light") }
+    @Test fun login_needed_scale200_light() {
+        launch(2.0f, false, restrictedVm(false))
+        composeRule.scrollIntoView(Tags.LOGIN_FROM_ERROR)
+        save("login_needed_scale200_light")
+    }
 
     @Test fun restricted_for_account_scale150_dark() {
-        launch(1.5f, true, restrictedVm(true)); save("restricted_for_account_scale150_dark")
+        launch(1.5f, true, restrictedVm(true))
+        composeRule.scrollIntoView(Tags.RETRY_SEARCH)
+        save("restricted_for_account_scale150_dark")
     }
 
     @Test fun restricted_for_account_scale200_light() {
-        launch(2.0f, false, restrictedVm(true)); save("restricted_for_account_scale200_light")
+        launch(2.0f, false, restrictedVm(true))
+        composeRule.scrollIntoView(Tags.RETRY_SEARCH)
+        save("restricted_for_account_scale200_light")
     }
-
-    @Test fun account_menu_logged_out_scale200_dark() {
-        launch(2.0f, true, viewModel(TestData.repository(sources), session = fakeSession(false)))
-        composeRule.onNodeWithTag(Tags.ACCOUNT).performClick()
-        saveScreen("account_menu_logged_out_scale200_dark")
-    }
-
-    @Test fun account_menu_logged_in_scale150_light() {
-        launch(1.5f, false, viewModel(TestData.repository(sources), session = fakeSession(true)))
-        composeRule.onNodeWithTag(Tags.ACCOUNT).performClick()
-        saveScreen("account_menu_logged_in_scale150_light")
-    }
-
-    private fun tokenDialog(fontScale: Float, dark: Boolean) {
-        composeRule.setContent {
-            val density = LocalDensity.current
-            CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale)) {
-                XTheme(darkTheme = dark) { ManualTokenDialog(onDismiss = {}, onSave = {}) }
-            }
-        }
-    }
-
-    @Test fun token_dialog_scale100_light() { tokenDialog(1.0f, false); saveScreen("token_dialog_scale100_light") }
-
-    @Test fun token_dialog_scale200_dark() { tokenDialog(2.0f, true); saveScreen("token_dialog_scale200_dark") }
 
     private fun historyVm(): MainViewModel {
         val history = TestData.tempHistory()

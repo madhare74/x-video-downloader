@@ -196,7 +196,7 @@ private fun ClipboardCard(link: String, onAccept: () -> Unit, onDismiss: () -> U
 @Composable
 private fun ErrorCard(error: AppError, onRetry: () -> Unit, onLogin: () -> Unit) {
     // «Нужен вход» и «нет видео» — не ошибки приложения, поэтому спокойный цвет.
-    val calm = error == AppError.NoVideo || Messages.canLogin(error)
+    val calm = error == AppError.NoVideo || error == AppError.RestrictedForAccount || Messages.canLogin(error)
     Card(
         modifier = Modifier.fillMaxWidth().testTag(Tags.ERROR),
         colors = CardDefaults.cardColors(
