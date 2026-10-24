@@ -1,0 +1,170 @@
+10-24 06:57:26.093  2499  2520 I TestRunner: started: e_mobile_chrome_login(ru.madhare74.xvideo.LoginWebProbe)
+10-24 06:57:26.097   300  2588 D goldfish-address-space: claimShared: Ask to claim region [0x3fef6b000 0x3ff033000]
+10-24 06:57:26.099   300  2588 D goldfish-address-space: claimShared: Ask to claim region [0x3ff803000 0x3ff8cb000]
+10-24 06:57:26.113   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ff0fb000 0x3ff1c3000]
+10-24 06:57:26.115  2499  2520 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@7fe94ae]
+10-24 06:57:26.118  2499  2520 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-24 06:57:26.129   633   653 D EventSequenceValidator: Transition from ACTIVITY_FINISHED to INTENT_STARTED
+10-24 06:57:26.132   633   653 D EventSequenceValidator: Transition from INTENT_STARTED to ACTIVITY_LAUNCHED
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.141   633  2414 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.142   633  2414 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.143   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ff673000 0x3ff73b000]
+10-24 06:57:26.148  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: PRE_ON_CREATE
+10-24 06:57:26.148  2499  2499 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-24 06:57:26.151   350   350 E Layer   : [Surface(name=Task=1)/@0x9c0817 - animation-leash#0] No local sync point found
+10-24 06:57:26.152   350   350 E Layer   : [Surface(name=Task=1)/@0x9c0817 - animation-leash#0] No local sync point found
+10-24 06:57:26.152   350   350 E Layer   : [Surface(name=Task=22)/@0xa8be44a - animation-leash#0] No local sync point found
+10-24 06:57:26.152   350   350 E Layer   : [Surface(name=Task=22)/@0xa8be44a - animation-leash#0] No local sync point found
+10-24 06:57:26.152  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: CREATED
+10-24 06:57:26.152  2499  2499 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=androidx.activity.ComponentActivity@913359d
+10-24 06:57:26.159  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: STARTED
+10-24 06:57:26.159  2499  2499 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=androidx.activity.ComponentActivity@913359d
+10-24 06:57:26.159  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: RESUMED
+10-24 06:57:26.159  2499  2499 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=androidx.activity.ComponentActivity@913359d
+10-24 06:57:26.176   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3feddb000 0x3feea3000]
+10-24 06:57:26.178   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3feea3000 0x3fef6b000]
+10-24 06:57:26.179   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fe4b9000 0x3fe581000]
+10-24 06:57:26.182   633   658 D ArtManagerInternalImpl: /data/misc/iorapd/ru.madhare74.xvideo/5/androidx.activity.ComponentActivity/compiled_traces/compiled_trace.pb doesn't exist
+10-24 06:57:26.182   633   658 I ActivityTaskManager: Displayed ru.madhare74.xvideo/androidx.activity.ComponentActivity: +56ms
+10-24 06:57:26.184   633   653 D EventSequenceValidator: Transition from ACTIVITY_LAUNCHED to ACTIVITY_FINISHED
+10-24 06:57:26.195   633   653 D EventSequenceValidator: Transition from ACTIVITY_FINISHED to INTENT_STARTED
+10-24 06:57:26.195  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: PAUSED
+10-24 06:57:26.195  2499  2499 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=androidx.activity.ComponentActivity@913359d
+10-24 06:57:26.196   633   653 D EventSequenceValidator: Transition from INTENT_STARTED to ACTIVITY_LAUNCHED
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.196   633  1587 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.207   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fef6b000 0x3ff033000]
+10-24 06:57:26.216   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fe581000 0x3fe649000]
+10-24 06:57:26.229   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fe4b9000 0x3fe581000]
+10-24 06:57:26.231   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3feea3000 0x3fef6b000]
+10-24 06:57:26.233   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ff0fb000 0x3ff1c3000]
+10-24 06:57:26.240   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ff673000 0x3ff73b000]
+10-24 06:57:26.246   633   653 D EventSequenceValidator: Transition from ACTIVITY_LAUNCHED to ACTIVITY_CANCELLED
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.247   633  1587 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:26.250  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: STOPPED
+10-24 06:57:26.250  2499  2499 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=androidx.activity.ComponentActivity@913359d
+10-24 06:57:26.251  2499  2499 D LifecycleMonitor: Lifecycle status change: androidx.activity.ComponentActivity@913359d in: DESTROYED
+10-24 06:57:26.251  2499  2499 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 06:57:26.255   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ff803000 0x3ff8cb000]
+10-24 06:57:26.257  2499  2520 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@7fe94ae]
+10-24 06:57:26.258   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fe649000 0x3fe711000]
+10-24 06:57:26.259   300  2588 D goldfish-address-space: claimShared: Ask to claim region [0x3fe711000 0x3fe7d9000]
+10-24 06:57:26.265  2499  2520 E TestRunner: assumption failed: e_mobile_chrome_login(ru.madhare74.xvideo.LoginWebProbe)
+10-24 06:57:26.265  2499  2520 E TestRunner: ----- begin exception -----
+10-24 06:57:26.265  2499  2520 E TestRunner: org.junit.AssumptionViolatedException: got: <false>, expected: is <true>
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.Assume.assumeThat(Assume.java:106)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.Assume.assumeTrue(Assume.java:50)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at ru.madhare74.xvideo.LoginWebProbe.probe(LoginWebProbe.kt:54)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at ru.madhare74.xvideo.LoginWebProbe.probe$default(LoginWebProbe.kt:44)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at ru.madhare74.xvideo.LoginWebProbe.e_mobile_chrome_login(LoginWebProbe.kt:166)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:272)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt:271)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.withDisposableContent(ComposeUiTest.android.kt:505)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1$1.invoke(ComposeUiTest.android.kt:333)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.withComposeIdlingResource(ComposeUiTest.android.kt:385)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.access$withComposeIdlingResource(ComposeUiTest.android.kt:219)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt:332)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.withWindowRecomposer(ComposeUiTest.android.kt:359)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.access$withWindowRecomposer(ComposeUiTest.android.kt:219)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1.invoke(ComposeUiTest.android.kt:331)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.withTestCoroutines(ComposeUiTest.android.kt:372)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.access$withTestCoroutines(ComposeUiTest.android.kt:219)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1.invoke(ComposeUiTest.android.kt:330)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:66)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt:329)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.IdlingResourceRegistry.withRegistry(IdlingResourceRegistry.jvm.kt:155)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1.invoke(ComposeUiTest.android.kt:328)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.ComposeRootRegistry.withRegistry(ComposeRootRegistry.android.kt:146)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:327)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:271)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+10-24 06:57:26.265  2499  2520 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2205)
+10-24 06:57:26.265  2499  2520 E TestRunner: ----- end exception -----
+10-24 06:57:26.266  2499  2520 I TestRunner: finished: e_mobile_chrome_login(ru.madhare74.xvideo.LoginWebProbe)

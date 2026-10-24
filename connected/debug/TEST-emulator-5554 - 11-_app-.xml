@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="ru.madhare74.xvideo.DownloadTest" tests="51" failures="0" errors="0" skipped="13" time="35.417" timestamp="2026-10-24T06:57:56" hostname="localhost">
+  <properties>
+    <property name="device" value="emulator-5554 - 11" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="downloadSavesFileAndAddsToHistory" classname="ru.madhare74.xvideo.DownloadTest" time="2.97" />
+  <testcase name="manualTokenValidation" classname="ru.madhare74.xvideo.LoginUiTest" time="1.395" />
+  <testcase name="h_direct_onboarding" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.262">
+    <skipped />
+  </testcase>
+  <testcase name="l_hide_modal" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.333">
+    <skipped />
+  </testcase>
+  <testcase name="d_mobile_chrome" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.206">
+    <skipped />
+  </testcase>
+  <testcase name="b_current_console" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.178">
+    <skipped />
+  </testcase>
+  <testcase name="j_remove_cover" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.159">
+    <skipped />
+  </testcase>
+  <testcase name="e_mobile_chrome_login" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.181">
+    <skipped />
+  </testcase>
+  <testcase name="i_force_visible" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.156">
+    <skipped />
+  </testcase>
+  <testcase name="f_desktop_chrome" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.155">
+    <skipped />
+  </testcase>
+  <testcase name="a_current" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.151">
+    <skipped />
+  </testcase>
+  <testcase name="m_match_parent" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.181">
+    <skipped />
+  </testcase>
+  <testcase name="g_software_layer" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.128">
+    <skipped />
+  </testcase>
+  <testcase name="k_fix_dvh" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.153">
+    <skipped />
+  </testcase>
+  <testcase name="c_default_ua" classname="ru.madhare74.xvideo.LoginWebProbe" time="0.359">
+    <skipped />
+  </testcase>
+  <testcase name="invalidLinkMessage" classname="ru.madhare74.xvideo.MainUiTest" time="0.615" />
+  <testcase name="accountMenuLogout" classname="ru.madhare74.xvideo.MainUiTest" time="0.754" />
+  <testcase name="noVideoMessage" classname="ru.madhare74.xvideo.MainUiTest" time="0.505" />
+  <testcase name="pasteLinkShowsQualities" classname="ru.madhare74.xvideo.MainUiTest" time="0.883" />
+  <testcase name="restrictedForAccountMessage" classname="ru.madhare74.xvideo.MainUiTest" time="0.678" />
+  <testcase name="loginRetriesSearchWithAccount" classname="ru.madhare74.xvideo.MainUiTest" time="0.629" />
+  <testcase name="restrictedMessage" classname="ru.madhare74.xvideo.MainUiTest" time="0.682" />
+  <testcase name="multipleVideosAndGif" classname="ru.madhare74.xvideo.MainUiTest" time="1.008" />
+  <testcase name="clipboardSuggestion" classname="ru.madhare74.xvideo.MainUiTest" time="0.504" />
+  <testcase name="offlineMessage" classname="ru.madhare74.xvideo.MainUiTest" time="0.682" />
+  <testcase name="qualities_mid_scale200_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.8" />
+  <testcase name="qualities_top_scale150_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.706" />
+  <testcase name="result_scale200_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.785" />
+  <testcase name="qualities_scale100_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.75" />
+  <testcase name="no_video_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.63" />
+  <testcase name="restricted_for_account_scale150_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.752" />
+  <testcase name="restricted_for_account_scale200_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.703" />
+  <testcase name="history_scale200_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.632" />
+  <testcase name="qualities_top_scale200_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.753" />
+  <testcase name="qualities_bottom_scale200_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.758" />
+  <testcase name="qualities_scale100_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.802" />
+  <testcase name="result_scale100_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.704" />
+  <testcase name="start_clipboard_scale150_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.624" />
+  <testcase name="login_needed_scale200_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.759" />
+  <testcase name="qualities_bottom_scale150_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.856" />
+  <testcase name="multi_scale150_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.631" />
+  <testcase name="login_needed_scale100_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.605" />
+  <testcase name="result_scale100_dark" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.684" />
+  <testcase name="history_scale100_light" classname="ru.madhare74.xvideo.ScreenshotTest" time="0.633" />
+  <testcase name="shareFromXOpensAndSearches" classname="ru.madhare74.xvideo.ShareIntentTest" time="0.4" />
+  <testcase name="login_needed_light" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="1.134" />
+  <testcase name="login_help_light" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="1.078" />
+  <testcase name="account_menu_logged_in_light" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="1.06" />
+  <testcase name="login_page_error_dark" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="0.882" />
+  <testcase name="account_menu_logged_out_dark" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="1.056" />
+  <testcase name="token_dialog_dark" classname="ru.madhare74.xvideo.SystemFontScreenshotTest" time="0.982" />
+</testsuite>

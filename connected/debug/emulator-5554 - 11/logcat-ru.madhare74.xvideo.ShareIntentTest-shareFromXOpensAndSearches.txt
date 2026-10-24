@@ -1,0 +1,66 @@
+10-24 06:57:48.155  2499  2520 I TestRunner: started: shareFromXOpensAndSearches(ru.madhare74.xvideo.ShareIntentTest)
+10-24 06:57:48.157   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fddf1000 0x3fdeb9000]
+10-24 06:57:48.158  2499  2520 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@c0a1392]
+10-24 06:57:48.159   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ffa5b000 0x3ffb23000]
+10-24 06:57:48.160   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fec01000 0x3fecc9000]
+10-24 06:57:48.175   633   653 D EventSequenceValidator: Transition from ACTIVITY_FINISHED to INTENT_STARTED
+10-24 06:57:48.177   633   653 D EventSequenceValidator: Transition from INTENT_STARTED to ACTIVITY_LAUNCHED
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.178   633  2169 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.183  2499  2499 D LifecycleMonitor: Lifecycle status change: ru.madhare74.xvideo.MainActivity@84598b7 in: PRE_ON_CREATE
+10-24 06:57:48.193   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fe9a9000 0x3fea71000]
+10-24 06:57:48.202   350   350 E Layer   : [Surface(name=Task=1)/@0x9c0817 - animation-leash#0] No local sync point found
+10-24 06:57:48.202   350   350 E Layer   : [Surface(name=Task=1)/@0x9c0817 - animation-leash#0] No local sync point found
+10-24 06:57:48.202   350   350 E Layer   : [Surface(name=Task=96)/@0xe0c191a - animation-leash#0] No local sync point found
+10-24 06:57:48.202   350   350 E Layer   : [Surface(name=Task=96)/@0xe0c191a - animation-leash#0] No local sync point found
+10-24 06:57:48.215  2499  2499 D LifecycleMonitor: Lifecycle status change: ru.madhare74.xvideo.MainActivity@84598b7 in: CREATED
+10-24 06:57:48.217  2499  2499 D LifecycleMonitor: Lifecycle status change: ru.madhare74.xvideo.MainActivity@84598b7 in: STARTED
+10-24 06:57:48.217  2499  2499 D LifecycleMonitor: Lifecycle status change: ru.madhare74.xvideo.MainActivity@84598b7 in: RESUMED
+10-24 06:57:48.307   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fea71000 0x3feb39000]
+10-24 06:57:48.309   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3ffbeb000 0x3ffcb3000]
+10-24 06:57:48.309   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fec01000 0x3fecc9000]
+10-24 06:57:48.332   633   658 D ArtManagerInternalImpl: /data/misc/iorapd/ru.madhare74.xvideo/5/ru.madhare74.xvideo.MainActivity/compiled_traces/compiled_trace.pb doesn't exist
+10-24 06:57:48.332   633   658 I ActivityTaskManager: Displayed ru.madhare74.xvideo/.MainActivity: +161ms
+10-24 06:57:48.333   633   653 D EventSequenceValidator: Transition from ACTIVITY_LAUNCHED to ACTIVITY_FINISHED
+10-24 06:57:48.527   300   300 D goldfish-address-space: claimShared: Ask to claim region [0x3fddf1000 0x3fdeb9000]
+10-24 06:57:48.533  2499  2499 D LifecycleMonitor: Lifecycle status change: ru.madhare74.xvideo.MainActivity@84598b7 in: PAUSED
+10-24 06:57:48.537  2499  2520 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@c0a1392]
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_8 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_9 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_7 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_4 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_11 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_5 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_6 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_3 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_2 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.538   633   647 W InputReader: Device virtio_input_multi_touch_10 is associated with display ADISPLAY_ID_NONE.
+10-24 06:57:48.541  2499  2520 I TestRunner: finished: shareFromXOpensAndSearches(ru.madhare74.xvideo.ShareIntentTest)
