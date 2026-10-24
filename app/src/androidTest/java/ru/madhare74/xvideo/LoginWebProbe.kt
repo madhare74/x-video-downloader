@@ -135,6 +135,16 @@ class LoginWebProbe {
             "if(!el||el===inp||el.contains(inp)||inp.contains(el))break;console.log('hide '+el.tagName+' '+el.className);el.style.display='none';}})()",
     )
 
+    @Test fun k_fix_dvh() = probe(
+        "k_fix_dvh", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true,
+        afterLoad = "(function(){try{var st=document.createElement('style');st.textContent='[class*=\\\"100dvh\\\"]{max-height:calc(100vh - 32px)!important}';document.head.appendChild(st);console.log('fix dvh ok')}catch(e){console.log('fix err '+e)}})()",
+    )
+
+    @Test fun l_hide_modal() = probe(
+        "l_hide_modal", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true,
+        afterLoad = "(function(){try{var n=0;document.querySelectorAll('[class*=\\\"xds-modal\\\"]').forEach(function(m){var inp=document.querySelector('input');if(inp&&m.contains(inp))return;m.style.display='none';n++;});console.log('hidden modals '+n)}catch(e){console.log('hide err '+e)}})()",
+    )
+
     @Test fun a_current() = probe("a_current_flow", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = false)
 
     @Test fun b_current_console() = probe("b_current_console", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true)
@@ -151,6 +161,9 @@ class LoginWebProbe {
         /** Где поле ввода и что его скрывает: размеры, opacity, visibility, display, transform по цепочке предков. */
         const val DIAG_JS = """(function(){
           var out=['inner='+innerWidth+'x'+innerHeight+' dpr='+devicePixelRatio+' docH='+document.documentElement.scrollHeight];
+          var t=document.createElement('div');t.style.cssText='position:absolute;height:100dvh;width:1px';document.body.appendChild(t);
+          var t2=document.createElement('div');t2.style.cssText='position:absolute;height:100vh;width:1px';document.body.appendChild(t2);
+          out.push('dvh='+t.getBoundingClientRect().height+' vh='+t2.getBoundingClientRect().height);t.remove();t2.remove();
           var inp=document.querySelector('input');
           if(!inp){return out.concat(['no input']).join(' || ');}
           var e=inp, i=0;
