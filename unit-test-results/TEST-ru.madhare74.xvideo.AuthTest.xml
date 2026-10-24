@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.AuthTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:40" hostname="runnervm8k3b6" time="0.576">
+  <properties/>
+  <testcase name="accountUsedOnlyWhenGuestRestricted" classname="ru.madhare74.xvideo.AuthTest" time="0.174"/>
+  <testcase name="tokenIsNotPrinted" classname="ru.madhare74.xvideo.AuthTest" time="0.004"/>
+  <testcase name="getsCt0FromXAndRetries" classname="ru.madhare74.xvideo.AuthTest" time="0.339"/>
+  <testcase name="notLoggedInKeepsRestricted" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <testcase name="noVideoNotRetriedWithAccount" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <testcase name="accountAlsoRestricted" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <testcase name="parseCookieHeader" classname="ru.madhare74.xvideo.AuthTest" time="0.002"/>
+  <testcase name="accountOffline" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <testcase name="sessionLoginLogout" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <testcase name="manualInput" classname="ru.madhare74.xvideo.AuthTest" time="0.002"/>
+  <testcase name="restrictedEvenForAccount" classname="ru.madhare74.xvideo.AuthTest" time="0.01"/>
+  <testcase name="accountHelpsWhenGuestBroken" classname="ru.madhare74.xvideo.AuthTest" time="0.004"/>
+  <testcase name="expiredSessionLogsOut" classname="ru.madhare74.xvideo.AuthTest" time="0.009"/>
+  <testcase name="sendsSessionHeaders" classname="ru.madhare74.xvideo.AuthTest" time="0.008"/>
+  <testcase name="accountSessionExpired" classname="ru.madhare74.xvideo.AuthTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

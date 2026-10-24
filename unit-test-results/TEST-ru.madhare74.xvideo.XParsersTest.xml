@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.XParsersTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:41" hostname="runnervm8k3b6" time="0.007">
+  <properties/>
+  <testcase name="singleVideo" classname="ru.madhare74.xvideo.XParsersTest" time="0.0"/>
+  <testcase name="guestApiErrors" classname="ru.madhare74.xvideo.XParsersTest" time="0.0"/>
+  <testcase name="guestApiOldUserObject" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="gif" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="multipleVideosSkipPhotos" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="emptyMeansNotFound" classname="ru.madhare74.xvideo.XParsersTest" time="0.0"/>
+  <testcase name="tombstones" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="unknownFormat" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="videoFromQuotedPost" classname="ru.madhare74.xvideo.XParsersTest" time="0.0"/>
+  <testcase name="guestApiVideo" classname="ru.madhare74.xvideo.XParsersTest" time="0.001"/>
+  <testcase name="noVideo" classname="ru.madhare74.xvideo.XParsersTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

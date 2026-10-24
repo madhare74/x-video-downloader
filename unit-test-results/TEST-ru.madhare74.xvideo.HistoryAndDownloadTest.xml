@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.HistoryAndDownloadTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:41" hostname="runnervm8k3b6" time="0.044">
+  <properties/>
+  <testcase name="brokenHistoryFileIsIgnored" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.006"/>
+  <testcase name="noSpaceDetected" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.001"/>
+  <testcase name="downloadsWithProgress" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.016"/>
+  <testcase name="httpErrorIsDownloadFailed" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.009"/>
+  <testcase name="historyPersistsNewestFirst" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.005"/>
+  <testcase name="writeErrorClassified" classname="ru.madhare74.xvideo.HistoryAndDownloadTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

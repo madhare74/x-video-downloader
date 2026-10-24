@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.PostRepositoryTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:41" hostname="runnervm8k3b6" time="0.04">
+  <properties/>
+  <testcase name="shortLinkResolved" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.005"/>
+  <testcase name="shortLinkToOtherSite" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.004"/>
+  <testcase name="primarySuccessSkipsFallback" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.004"/>
+  <testcase name="postWithoutVideo" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.003"/>
+  <testcase name="bothFormatsChanged" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.004"/>
+  <testcase name="fallbackUsedWhenPrimaryFormatChanged" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.004"/>
+  <testcase name="shortLinkOffline" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.003"/>
+  <testcase name="restrictedWins" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.003"/>
+  <testcase name="invalidLinkDoesNotTouchNetwork" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.002"/>
+  <testcase name="fallbackUsedWhenPrimaryOffline" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.002"/>
+  <testcase name="notFound" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.003"/>
+  <testcase name="offlineEverywhere" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.001"/>
+  <testcase name="parserCrashIsFormatChanged" classname="ru.madhare74.xvideo.PostRepositoryTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

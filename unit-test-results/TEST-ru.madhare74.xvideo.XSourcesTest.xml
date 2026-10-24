@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.XSourcesTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:41" hostname="runnervm8k3b6" time="0.147">
+  <properties/>
+  <testcase name="tokenHasNoDotsOrZeros" classname="ru.madhare74.xvideo.XSourcesTest" time="0.003"/>
+  <testcase name="guestApiNoTokenIsFormatChange" classname="ru.madhare74.xvideo.XSourcesTest" time="0.007"/>
+  <testcase name="tcoRedirect" classname="ru.madhare74.xvideo.XSourcesTest" time="0.006"/>
+  <testcase name="guestApiActivatesTokenAndRetriesOnce" classname="ru.madhare74.xvideo.XSourcesTest" time="0.102"/>
+  <testcase name="tcoHtmlPage" classname="ru.madhare74.xvideo.XSourcesTest" time="0.007"/>
+  <testcase name="sizeFromHead" classname="ru.madhare74.xvideo.XSourcesTest" time="0.007"/>
+  <testcase name="syndicationRequestAndParse" classname="ru.madhare74.xvideo.XSourcesTest" time="0.007"/>
+  <testcase name="syndicationHttpCodes" classname="ru.madhare74.xvideo.XSourcesTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

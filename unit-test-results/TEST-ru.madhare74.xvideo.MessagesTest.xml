@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.madhare74.xvideo.MessagesTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-24T06:55:41" hostname="runnervm8k3b6" time="0.001">
+  <properties/>
+  <testcase name="keyMessages" classname="ru.madhare74.xvideo.MessagesTest" time="0.0"/>
+  <testcase name="everyErrorHasItsOwnMessage" classname="ru.madhare74.xvideo.MessagesTest" time="0.001"/>
+  <testcase name="retryOnlyForTransientErrors" classname="ru.madhare74.xvideo.MessagesTest" time="0.0"/>
+  <testcase name="loginButtonOnlyWhereItHelps" classname="ru.madhare74.xvideo.MessagesTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
