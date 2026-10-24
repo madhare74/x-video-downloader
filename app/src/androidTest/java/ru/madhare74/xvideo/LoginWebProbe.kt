@@ -42,7 +42,14 @@ class LoginWebProbe {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun probe(name: String, url: String, userAgent: ((String) -> String)?, chromeClient: Boolean) {
+    private fun probe(
+        name: String,
+        url: String,
+        userAgent: ((String) -> String)?,
+        chromeClient: Boolean,
+        software: Boolean = false,
+        afterLoad: String? = null,
+    ) {
         assumeTrue(InstrumentationRegistry.getArguments().getString("probe") == "true")
         val log = Collections.synchronizedList(mutableListOf<String>())
         var web: WebView? = null
@@ -70,13 +77,27 @@ class LoginWebProbe {
                             }
                         }
                     }
+                    if (software) setLayerType(android.view.View.LAYER_TYPE_SOFTWARE, null)
                     web = this
                     loadUrl(url)
                 }
             })
         }
-        Thread.sleep(25_000)
+        Thread.sleep(20_000)
+        if (afterLoad != null) {
+            composeRule.runOnUiThread { web?.evaluateJavascript(afterLoad, null) }
+            Thread.sleep(3_000)
+        }
         composeRule.waitForIdle()
+        val diag = java.util.concurrent.CountDownLatch(1)
+        composeRule.runOnUiThread {
+            web?.evaluateJavascript(DIAG_JS) { v ->
+                log += "diag: $v"
+                diag.countDown()
+            }
+        }
+        diag.await(5, java.util.concurrent.TimeUnit.SECONDS)
+        log += "view: ${web?.width}x${web?.height}"
         val text = java.util.concurrent.CountDownLatch(1)
         composeRule.runOnUiThread {
             web?.evaluateJavascript(
@@ -95,6 +116,17 @@ class LoginWebProbe {
         composeRule.runOnUiThread { CookieManager.getInstance().removeAllCookies(null) }
     }
 
+    @Test fun g_software_layer() = probe("g_software", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true, software = true)
+
+    @Test fun h_direct_onboarding() =
+        probe("h_direct", "https://x.com/i/jf/onboarding/web?mode=login", { it.replace("; wv", "") }, chromeClient = true)
+
+    @Test fun i_force_visible() = probe(
+        "i_force_visible", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true,
+        afterLoad = "document.querySelectorAll('*').forEach(function(e){var s=getComputedStyle(e);" +
+            "if(s.opacity==='0')e.style.opacity='1';if(s.visibility==='hidden')e.style.visibility='visible';});",
+    )
+
     @Test fun a_current() = probe("a_current_flow", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = false)
 
     @Test fun b_current_console() = probe("b_current_console", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true)
@@ -106,4 +138,25 @@ class LoginWebProbe {
     @Test fun e_mobile_chrome_login() = probe("e_mobile_chrome_login", "https://x.com/login", { mobileChrome }, chromeClient = true)
 
     @Test fun f_desktop_chrome() = probe("f_desktop_chrome", "https://x.com/i/flow/login", { desktopChrome }, chromeClient = true)
+
+    private companion object {
+        /** Где поле ввода и что его скрывает: размеры, opacity, visibility, display, transform по цепочке предков. */
+        const val DIAG_JS = """(function(){
+          var out=['inner='+innerWidth+'x'+innerHeight+' dpr='+devicePixelRatio+' docH='+document.documentElement.scrollHeight];
+          var inp=document.querySelector('input');
+          if(!inp){return out.concat(['no input']).join(' || ');}
+          var e=inp, i=0;
+          while(e && i<40){
+            var s=getComputedStyle(e), r=e.getBoundingClientRect();
+            if(i<3 || s.opacity!=='1' || s.visibility!=='visible' || s.display==='none' || s.transform!=='none' || r.height===0 || s.overflow==='hidden' && r.height<50){
+              out.push(i+':'+e.tagName+(e.id?'#'+e.id:'')+' rect='+Math.round(r.x)+','+Math.round(r.y)+','+Math.round(r.width)+'x'+Math.round(r.height)+
+                ' op='+s.opacity+' vis='+s.visibility+' disp='+s.display+' tf='+s.transform+' pos='+s.position+' ov='+s.overflow+' cls='+String(e.className).slice(0,60));
+            }
+            e=e.parentElement; i++;
+          }
+          var iframes=document.querySelectorAll('iframe').length;
+          out.push('iframes='+iframes+' dialogs='+document.querySelectorAll('[role=dialog]').length);
+          return out.join(' || ');
+        })()"""
+    }
 }
