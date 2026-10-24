@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -198,6 +199,10 @@ private fun LoginWebView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
             WebView(context).apply {
+                // Явно «на весь экран»: по умолчанию AndroidView создаёт WebView с высотой
+                // «по содержимому», и тогда CSS 100vh/100dvh = 0 — окно входа X получается
+                // нулевой высоты и форма не видна (чёрный или белый экран).
+                layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 // X не пускает «встроенные браузеры»: убираем пометку WebView из User-Agent.

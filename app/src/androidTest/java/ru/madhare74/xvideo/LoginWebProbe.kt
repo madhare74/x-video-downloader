@@ -49,6 +49,7 @@ class LoginWebProbe {
         chromeClient: Boolean,
         software: Boolean = false,
         afterLoad: String? = null,
+        matchParent: Boolean = false,
     ) {
         assumeTrue(InstrumentationRegistry.getArguments().getString("probe") == "true")
         val log = Collections.synchronizedList(mutableListOf<String>())
@@ -56,6 +57,11 @@ class LoginWebProbe {
         composeRule.setContent {
             AndroidView(modifier = Modifier.fillMaxSize(), factory = { c ->
                 WebView(c).apply {
+                    if (matchParent) {
+                        layoutParams = android.view.ViewGroup.LayoutParams(
+                            android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                        )
+                    }
                     settings.javaScriptEnabled = true
                     settings.domStorageEnabled = true
                     userAgent?.let { settings.userAgentString = it(settings.userAgentString) }
@@ -143,6 +149,10 @@ class LoginWebProbe {
     @Test fun l_hide_modal() = probe(
         "l_hide_modal", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true,
         afterLoad = "(function(){try{var n=0;document.querySelectorAll('[class*=\\\"xds-modal\\\"]').forEach(function(m){var inp=document.querySelector('input');if(inp&&m.contains(inp))return;m.style.display='none';n++;});console.log('hidden modals '+n)}catch(e){console.log('hide err '+e)}})()",
+    )
+
+    @Test fun m_match_parent() = probe(
+        "m_match_parent", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true, matchParent = true,
     )
 
     @Test fun a_current() = probe("a_current_flow", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = false)
