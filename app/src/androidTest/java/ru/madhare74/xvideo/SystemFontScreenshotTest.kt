@@ -64,6 +64,11 @@ class SystemFontScreenshotTest {
         saveScreen("token_dialog_dark")
     }
 
+    @Test fun login_page_error_dark() {
+        composeRule.setContent { XTheme(darkTheme = true) { ru.madhare74.xvideo.ui.LoginErrorPanel(onRetry = {}, onManual = {}) } }
+        saveScreen("login_page_error_dark")
+    }
+
     @Test fun login_needed_light() {
         val session = fakeSession(false)
         val repository = PostRepository(

@@ -5,6 +5,8 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.webkit.CookieManager
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
@@ -13,6 +15,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +25,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -91,6 +97,8 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
     var loading by remember { mutableStateOf(true) }
     var manual by remember { mutableStateOf(false) }
     var done by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
+    var webView by remember { mutableStateOf<WebView?>(null) }
     fun finishWith(cookies: XCookies) {
         if (done) return
         done = true
@@ -134,9 +142,23 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth())
             Box(Modifier.fillMaxSize()) {
                 LoginWebView(
-                    onLoading = { loading = it },
+                    onCreated = { webView = it },
+                    onLoading = {
+                        loading = it
+                        if (it) failed = false
+                    },
                     onPageFinished = { LoginActivity.webCookies()?.let { finishWith(it) } },
+                    onError = { failed = true },
                 )
+                if (failed) {
+                    LoginErrorPanel(
+                        onRetry = {
+                            failed = false
+                            webView?.loadUrl(LoginActivity.LOGIN_URL)
+                        },
+                        onManual = { manual = true },
+                    )
+                }
             }
         }
     }
@@ -154,7 +176,12 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-private fun LoginWebView(onLoading: (Boolean) -> Unit, onPageFinished: () -> Unit) {
+private fun LoginWebView(
+    onCreated: (WebView) -> Unit,
+    onLoading: (Boolean) -> Unit,
+    onPageFinished: () -> Unit,
+    onError: () -> Unit,
+) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -171,12 +198,46 @@ private fun LoginWebView(onLoading: (Boolean) -> Unit, onPageFinished: () -> Uni
                         onLoading(false)
                         onPageFinished()
                     }
+
+                    // Страница x.com не открылась (нет сети, VPN не пропускает приложение) —
+                    // вместо системной страницы ошибки показываем своё объяснение.
+                    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                        if (request?.isForMainFrame == true) {
+                            onLoading(false)
+                            onError()
+                        }
+                    }
                 }
+                onCreated(this)
                 loadUrl(LoginActivity.LOGIN_URL)
             }
         },
         onRelease = { it.destroy() },
     )
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun LoginErrorPanel(onRetry: () -> Unit, onManual: () -> Unit) {
+    Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize().testTag(Tags.LOGIN_ERROR)) {
+        Column(
+            Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text("Страница входа X не открылась.", style = MaterialTheme.typography.titleMedium)
+            Text(
+                "Сайт x.com недоступен для этого приложения. Чаще всего VPN работает только для " +
+                    "части приложений. В приложении VPN откройте «Раздельное туннелирование» (или " +
+                    "«Split tunneling», «Приложения») и добавьте «Загрузчик видео X» — или включите " +
+                    "VPN для всех приложений. Проверить VPN можно, открыв x.com в Chrome.",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onRetry, modifier = Modifier.testTag(Tags.LOGIN_RETRY)) { FitText("Повторить") }
+                OutlinedButton(onClick = onManual) { FitText("Ввести токен") }
+            }
+        }
+    }
 }
 
 /** Запасной способ входа: значение cookie `auth_token` из браузера на компьютере. */
