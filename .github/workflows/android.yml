@@ -122,6 +122,8 @@ jobs:
             sleep 3
             adb shell am instrument -w -e class ru.madhare74.xvideo.SystemFontScreenshotTest ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
             adb shell settings put system font_scale 1.0 >> app/build/shots.log 2>&1 || true
+            # Диагностика входа в X: настоящая страница x.com во встроенном браузере.
+            adb shell am instrument -w -e probe true -e class ru.madhare74.xvideo.LoginWebProbe ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
             mkdir -p app/build/screenshots
             adb exec-out run-as ru.madhare74.xvideo tar -c files/screenshots > app/build/shots.tar 2>> app/build/shots.log || true
             tar -xf app/build/shots.tar -C app/build/screenshots --strip-components=2 >> app/build/shots.log 2>&1 || true
