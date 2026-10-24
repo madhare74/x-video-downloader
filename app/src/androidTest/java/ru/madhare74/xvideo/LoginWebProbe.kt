@@ -127,6 +127,14 @@ class LoginWebProbe {
             "if(s.opacity==='0')e.style.opacity='1';if(s.visibility==='hidden')e.style.visibility='visible';});",
     )
 
+    /** Убираем всё, что лежит поверх поля ввода (до 6 слоёв), и смотрим, появится ли форма. */
+    @Test fun j_remove_cover() = probe(
+        "j_remove_cover", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true,
+        afterLoad = "(function(){var inp=document.querySelector('input');if(!inp)return;" +
+            "for(var k=0;k<6;k++){var c=inp.getBoundingClientRect();var el=document.elementFromPoint(c.x+c.width/2,c.y+c.height/2);" +
+            "if(!el||el===inp||el.contains(inp)||inp.contains(el))break;console.log('hide '+el.tagName+' '+el.className);el.style.display='none';}})()",
+    )
+
     @Test fun a_current() = probe("a_current_flow", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = false)
 
     @Test fun b_current_console() = probe("b_current_console", "https://x.com/i/flow/login", { it.replace("; wv", "") }, chromeClient = true)
@@ -154,6 +162,12 @@ class LoginWebProbe {
             }
             e=e.parentElement; i++;
           }
+          var c=inp.getBoundingClientRect(), x=c.x+c.width/2, y=c.y+c.height/2;
+          var top=document.elementsFromPoint(x,y).slice(0,8).map(function(el){var st=getComputedStyle(el),rr=el.getBoundingClientRect();
+            return el.tagName+(el.id?'#'+el.id:'')+'['+Math.round(rr.width)+'x'+Math.round(rr.height)+' pos='+st.position+' z='+st.zIndex+' bg='+st.backgroundColor+' op='+st.opacity+' src='+(el.src||'').slice(0,80)+' cls='+String(el.className).slice(0,50)+']';});
+          out.push('atPoint: '+top.join(' > '));
+          document.querySelectorAll('iframe').forEach(function(f){var rr=f.getBoundingClientRect(),st=getComputedStyle(f);
+            out.push('iframe '+Math.round(rr.x)+','+Math.round(rr.y)+' '+Math.round(rr.width)+'x'+Math.round(rr.height)+' pos='+st.position+' z='+st.zIndex+' vis='+st.visibility+' src='+(f.src||'').slice(0,100));});
           var iframes=document.querySelectorAll('iframe').length;
           out.push('iframes='+iframes+' dialogs='+document.querySelectorAll('[role=dialog]').length);
           return out.join(' || ');
