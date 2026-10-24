@@ -5,7 +5,13 @@ import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.VideoFrameDecoder
+import android.os.Handler
+import android.os.Looper
+import android.webkit.CookieManager
+import ru.madhare74.xvideo.data.AuthApiSource
 import ru.madhare74.xvideo.data.GuestApiSource
+import ru.madhare74.xvideo.data.PrefsSessionStore
+import ru.madhare74.xvideo.data.XSession
 import ru.madhare74.xvideo.data.Http
 import ru.madhare74.xvideo.data.PostRepository
 import ru.madhare74.xvideo.data.SizeProbe
@@ -22,10 +28,16 @@ import java.io.File
 /** Общие объекты приложения. В UI-тестах источник данных подменяется через [repositoryOverride]. */
 class AppGraph private constructor(context: Context) {
     val http = Http.client()
+    val session = XSession(PrefsSessionStore(context)).apply {
+        // При выходе стираем и cookies встроенного окна входа.
+        onLogout = { clearWebCookies() }
+    }
     private val defaultRepository = PostRepository(
         primary = SyndicationSource(http),
         fallback = GuestApiSource(http),
         shortLinks = TcoResolver(http),
+        authenticated = AuthApiSource(http, session),
+        isLoggedIn = { session.isLoggedIn },
     )
     val repository: PostRepository get() = repositoryOverride ?: defaultRepository
     val sizeProbe = SizeProbe(http)
@@ -43,6 +55,21 @@ class AppGraph private constructor(context: Context) {
             instance ?: synchronized(this) {
                 instance ?: AppGraph(context.applicationContext).also { instance = it }
             }
+    }
+}
+
+/** Удаляет cookies встроенного браузера (окно «Вход в X»). */
+fun clearWebCookies() {
+    // CookieManager безопаснее трогать из главного потока: выход может прийти из фонового запроса.
+    Handler(Looper.getMainLooper()).post {
+        try {
+            CookieManager.getInstance().apply {
+                removeAllCookies(null)
+                flush()
+            }
+        } catch (e: Exception) {
+            // WebView может быть недоступен (например, обновляется) — удалять нечего.
+        }
     }
 }
 

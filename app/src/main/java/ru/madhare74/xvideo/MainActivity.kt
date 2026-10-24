@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
             scheduler = graph.scheduler,
             history = graph.history,
             files = AndroidMediaFiles(applicationContext, graph.saver),
+            session = graph.session,
         )
     }
 

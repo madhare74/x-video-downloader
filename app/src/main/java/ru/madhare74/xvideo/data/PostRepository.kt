@@ -14,12 +14,15 @@ sealed interface LookupResult {
 
 /**
  * Поиск видео по ссылке: разбор ссылки (без сети), раскрытие t.co, запрос к основному
- * источнику и, если он не дал результата, к запасному.
+ * источнику и, если он не дал результата, к запасному. Если гостю X пост не отдаёт
+ * («нужен вход»), а вход выполнен — ещё один запрос от имени аккаунта ([authenticated]).
  */
 class PostRepository(
     private val primary: PostSource,
     private val fallback: PostSource?,
     private val shortLinks: ShortLinkResolver,
+    private val authenticated: PostSource? = null,
+    private val isLoggedIn: () -> Boolean = { false },
 ) {
 
     suspend fun lookup(input: String): LookupResult {
@@ -47,7 +50,33 @@ class PostRepository(
         if (first !is Attempt.Done || first.outcome !is FetchOutcome.Found) {
             fallback?.let { outcomes += attempt(it, id) }
         }
-        return combine(outcomes)
+        val guest = combine(outcomes)
+        val auth = authenticated
+        // С аккаунтом пробуем и тогда, когда гостевой доступ сломался: у вошедшего он отдельный.
+        if (guest is LookupResult.Failure && guest.error in RETRY_WITH_ACCOUNT && auth != null && isLoggedIn()) {
+            return lookupWithAccount(auth, id)
+        }
+        return guest
+    }
+
+    private suspend fun lookupWithAccount(source: PostSource, id: String): LookupResult {
+        val outcome = try {
+            source.fetch(id)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SessionExpiredException) {
+            return LookupResult.Failure(AppError.SessionExpired)
+        } catch (e: IOException) {
+            return LookupResult.Failure(AppError.Unavailable)
+        } catch (e: Exception) {
+            FetchOutcome.BadFormat
+        }
+        return when (outcome) {
+            is FetchOutcome.Found -> combine(listOf(Attempt.Done(outcome)))
+            FetchOutcome.Restricted -> LookupResult.Failure(AppError.RestrictedForAccount)
+            FetchOutcome.NotFound -> LookupResult.Failure(AppError.NotFound)
+            FetchOutcome.BadFormat -> LookupResult.Failure(AppError.FormatChanged)
+        }
     }
 
     private sealed interface Attempt {
@@ -85,5 +114,9 @@ class PostRepository(
             else -> AppError.Unavailable
         }
         return LookupResult.Failure(error)
+    }
+
+    private companion object {
+        val RETRY_WITH_ACCOUNT = setOf(AppError.Restricted, AppError.FormatChanged, AppError.Unavailable)
     }
 }

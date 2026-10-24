@@ -11,7 +11,15 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -56,6 +64,15 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
         pendingDeleteId = null
         if (result.resultCode == android.app.Activity.RESULT_OK && id != null) viewModel.onDeleteConfirmed(id)
     }
+
+    // Вход в X: после успешного входа повторяем поиск, если он остановился на «нужен вход».
+    val loginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            message("Вход в X выполнен")
+            viewModel.onLoggedIn()
+        }
+    }
+    val startLogin = { loginLauncher.launch(Intent(context, LoginActivity::class.java)) }
 
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
@@ -110,6 +127,9 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
                 title = {
                     FitText(if (state.tab == Tab.Search) "Загрузчик видео X" else "История загрузок")
                 },
+                actions = {
+                    AccountMenu(loggedIn = state.loggedIn, onLogin = startLogin, onLogout = viewModel::logout)
+                },
             )
         },
         snackbarHost = { SnackbarHost(snackbar) },
@@ -145,6 +165,7 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
                 onDownload = { video, variant -> withPermissions { viewModel.download(video, variant) } },
                 onCancel = viewModel::cancel,
                 onOpen = { uri -> if (!context.openVideo(uri)) message("Нет приложения для просмотра видео") },
+                onLogin = startLogin,
             )
             Tab.History -> HistoryScreen(
                 items = history,
@@ -155,6 +176,54 @@ fun XApp(viewModel: MainViewModel, readClipboard: () -> String?) {
                 onDelete = viewModel::deleteFile,
                 onRemoveEntry = viewModel::removeEntry,
             )
+        }
+    }
+}
+
+/** Кнопка «Аккаунт X» в шапке: войти или выйти. */
+@Composable
+fun AccountMenu(loggedIn: Boolean, onLogin: () -> Unit, onLogout: () -> Unit, initiallyOpen: Boolean = false) {
+    var open by remember { mutableStateOf(initiallyOpen) }
+    Box {
+        IconButton(onClick = { open = true }, modifier = Modifier.testTag(Tags.ACCOUNT)) {
+            Icon(
+                Icons.Default.AccountCircle,
+                contentDescription = if (loggedIn) "Аккаунт X: вход выполнен" else "Аккаунт X: войти",
+                tint = if (loggedIn) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+            )
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            if (loggedIn) {
+                DropdownMenuItem(
+                    text = { FitText("Вход в X выполнен", color = MaterialTheme.colorScheme.primary) },
+                    onClick = {},
+                    enabled = false,
+                    modifier = Modifier.testTag(Tags.ACCOUNT_STATUS),
+                )
+                DropdownMenuItem(
+                    text = { FitText("Выйти из X") },
+                    onClick = {
+                        open = false
+                        onLogout()
+                    },
+                    modifier = Modifier.testTag(Tags.ACCOUNT_LOGOUT),
+                )
+            } else {
+                DropdownMenuItem(
+                    text = { FitText("Вход в X не выполнен", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                    onClick = {},
+                    enabled = false,
+                    modifier = Modifier.testTag(Tags.ACCOUNT_STATUS),
+                )
+                DropdownMenuItem(
+                    text = { FitText("Войти в X") },
+                    onClick = {
+                        open = false
+                        onLogin()
+                    },
+                    modifier = Modifier.testTag(Tags.ACCOUNT_LOGIN),
+                )
+            }
         }
     }
 }

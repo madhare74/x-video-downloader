@@ -41,7 +41,12 @@ data class RawVariant(
 enum class AppError {
     InvalidLink,
     NotFound,
+    /** Нужен вход в аккаунт X (вход не выполнен). */
     Restricted,
+    /** Вход выполнен, но X не отдаёт пост и аккаунту. */
+    RestrictedForAccount,
+    /** Вход в X устарел — нужно войти снова. */
+    SessionExpired,
     NoVideo,
     Unavailable,
     FormatChanged,
@@ -56,7 +61,11 @@ object Messages {
         AppError.NotFound ->
             "Пост не найден или удалён."
         AppError.Restricted ->
-            "Видео доступно только после входа в аккаунт X: аккаунт закрыт или у поста возрастное ограничение. Такие посты приложение не поддерживает."
+            "Видео доступно только после входа в аккаунт X: аккаунт закрыт или у поста возрастное ограничение. Войдите в аккаунт X, чтобы скачать его."
+        AppError.RestrictedForAccount ->
+            "X не показывает этот пост и вашему аккаунту: аккаунт закрыт и вы на него не подписаны, или в настройках X выключен показ деликатного содержимого."
+        AppError.SessionExpired ->
+            "Вход в X устарел. Войдите снова."
         AppError.NoVideo ->
             "В этом посте нет видео."
         AppError.Unavailable ->
@@ -69,7 +78,18 @@ object Messages {
             "Ошибка при скачивании. Проверьте соединение и VPN и нажмите «Повторить»."
     }
 
+    /** Подсказка под сообщением, если она есть. */
+    fun hint(error: AppError): String? = when (error) {
+        AppError.RestrictedForAccount ->
+            "Проверьте в приложении X: Настройки → Конфиденциальность и безопасность → Что вы видите → " +
+                "«Показывать материалы деликатного характера». В аккаунте должен быть указан возраст 18+."
+        else -> null
+    }
+
+    /** Для этих ошибок в сообщении показывается кнопка «Войти в X». */
+    fun canLogin(error: AppError): Boolean = error == AppError.Restricted || error == AppError.SessionExpired
+
     /** Для ошибки сети подсказываем повторить поиск. */
     fun canRetrySearch(error: AppError): Boolean =
-        error == AppError.Unavailable || error == AppError.FormatChanged
+        error == AppError.Unavailable || error == AppError.FormatChanged || error == AppError.RestrictedForAccount
 }

@@ -21,9 +21,19 @@ class MessagesTest {
         assertEquals("В этом посте нет видео.", Messages.text(AppError.NoVideo))
         assertEquals("X изменил формат данных, нужно обновление приложения.", Messages.text(AppError.FormatChanged))
         assertTrue(Messages.text(AppError.Unavailable).contains("VPN"))
-        assertTrue(Messages.text(AppError.Restricted).contains("вход"))
+        assertTrue(Messages.text(AppError.Restricted).contains("Войдите в аккаунт X"))
+        assertTrue(Messages.text(AppError.SessionExpired).contains("Войдите снова"))
+        assertTrue(Messages.hint(AppError.RestrictedForAccount)!!.contains("деликатного"))
         assertTrue(Messages.text(AppError.NoSpace).contains("места"))
         assertTrue(Messages.text(AppError.DownloadFailed).contains("Повторить"))
+    }
+
+    @Test
+    fun loginButtonOnlyWhereItHelps() {
+        assertTrue(Messages.canLogin(AppError.Restricted))
+        assertTrue(Messages.canLogin(AppError.SessionExpired))
+        assertFalse(Messages.canLogin(AppError.RestrictedForAccount))
+        assertFalse(Messages.canLogin(AppError.NotFound))
     }
 
     @Test

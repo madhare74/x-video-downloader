@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -173,25 +174,8 @@ class GuestApiSource(
         return token
     }
 
-    private fun tweetRequest(id: String, token: String): Request {
-        val variables = buildJsonObject {
-            put("tweetId", id)
-            put("withCommunity", false)
-            put("includePromotedContent", false)
-            put("withVoice", false)
-        }
-        val features = buildJsonObject { FEATURES.forEach { (k, v) -> put(k, v) } }
-        val toggles = buildJsonObject {
-            put("withArticleRichContentState", true)
-            put("withArticlePlainText", false)
-            put("withGrokAnalyze", false)
-        }
-        val url = "${apiBase.trimEnd('/')}/graphql/$QUERY_ID/TweetResultByRestId".toHttpUrl().newBuilder()
-            .addQueryParameter("variables", variables.toString())
-            .addQueryParameter("features", features.toString())
-            .addQueryParameter("fieldToggles", toggles.toString())
-            .build()
-        return Request.Builder().url(url)
+    private fun tweetRequest(id: String, token: String): Request =
+        Request.Builder().url(tweetUrl(apiBase, id))
             .header("Authorization", "Bearer $BEARER")
             .header("x-guest-token", token)
             .header("x-twitter-active-user", "yes")
@@ -199,13 +183,33 @@ class GuestApiSource(
             .header("Content-Type", "application/json")
             .header("Cookie", "guest_id=v1%3A$token")
             .build()
-    }
 
     companion object {
         /** Публичный ключ веб-клиента X (тот же, что в коде сайта x.com). */
         const val BEARER =
             "AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA"
         const val QUERY_ID = "I9GDzyCGZL2wSoYFFrrTVw"
+
+        /** Адрес запроса поста — одинаковый для гостя и для вошедшего пользователя. */
+        fun tweetUrl(apiBase: String, id: String): HttpUrl {
+            val variables = buildJsonObject {
+                put("tweetId", id)
+                put("withCommunity", false)
+                put("includePromotedContent", false)
+                put("withVoice", false)
+            }
+            val features = buildJsonObject { FEATURES.forEach { (k, v) -> put(k, v) } }
+            val toggles = buildJsonObject {
+                put("withArticleRichContentState", true)
+                put("withArticlePlainText", false)
+                put("withGrokAnalyze", false)
+            }
+            return "${apiBase.trimEnd('/')}/graphql/$QUERY_ID/TweetResultByRestId".toHttpUrl().newBuilder()
+                .addQueryParameter("variables", variables.toString())
+                .addQueryParameter("features", features.toString())
+                .addQueryParameter("fieldToggles", toggles.toString())
+                .build()
+        }
 
         val FEATURES: Map<String, Boolean> = linkedMapOf(
             "creator_subscriptions_tweet_preview_api_enabled" to true,
@@ -238,6 +242,68 @@ class GuestApiSource(
             "responsive_web_graphql_exclude_directive_enabled" to true,
             "responsive_web_enhance_cards_enabled" to false,
         )
+    }
+}
+
+/** Вход в X устарел или отозван: X ответил «не авторизован». */
+class SessionExpiredException : Exception("X session expired")
+
+/**
+ * Запрос поста от имени аккаунта заказчика (после входа в X) — тот же запрос, что делает
+ * сайт x.com у вошедшего пользователя. Используется, только когда гостю X пост не отдаёт.
+ */
+class AuthApiSource(
+    private val client: OkHttpClient,
+    private val session: XSession,
+    private val apiBase: String = "https://x.com/i/api",
+) : PostSource {
+
+    override suspend fun fetch(id: String): FetchOutcome {
+        val first = request(id) ?: throw SessionExpiredException()
+        var response = first
+        if (response.code == 403 || (response.code == 401 && response.newCt0 != null)) {
+            // Без действующей ct0 X отвечает отказом и присылает новую — повторяем один раз.
+            val ct0 = response.newCt0
+            if (ct0 != null) {
+                session.updateCt0(ct0)
+                response = request(id) ?: throw SessionExpiredException()
+            }
+        }
+        return when {
+            response.code == 401 || response.code == 403 -> {
+                session.logout()
+                throw SessionExpiredException()
+            }
+            response.code == 404 -> FetchOutcome.NotFound
+            response.code == 429 || response.code >= 500 -> throw XUnavailableException("auth HTTP ${response.code}")
+            response.code != 200 -> FetchOutcome.BadFormat
+            else -> {
+                response.newCt0?.let(session::updateCt0)
+                GuestApiParser.parse(response.body)
+            }
+        }
+    }
+
+    private class Answer(val code: Int, val body: String, val newCt0: String?)
+
+    private suspend fun request(id: String): Answer? {
+        val cookies = session.cookies.value ?: return null
+        val builder = Request.Builder().url(GuestApiSource.tweetUrl(apiBase, id))
+            .header("Authorization", "Bearer ${GuestApiSource.BEARER}")
+            .header("X-Twitter-Auth-Type", "OAuth2Session")
+            .header("x-twitter-active-user", "yes")
+            .header("x-twitter-client-language", "en")
+            .header("Content-Type", "application/json")
+            .header("Cookie", cookies.header())
+        cookies.ct0?.let { builder.header("x-csrf-token", it) }
+        return withContext(Dispatchers.IO) {
+            client.newCall(builder.build()).execute().use { r ->
+                val ct0 = r.headers("Set-Cookie")
+                    .firstOrNull { it.trimStart().startsWith("ct0=") }
+                    ?.substringAfter("ct0=")?.substringBefore(';')?.trim()?.takeIf { it.isNotEmpty() }
+                Answer(r.code, r.body?.string().orEmpty(), ct0)
+            }
+        }
     }
 }
 

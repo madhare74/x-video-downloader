@@ -75,6 +75,7 @@ fun SearchScreen(
     onDownload: (PostVideo, VideoVariant) -> Unit,
     onCancel: (String) -> Unit,
     onOpen: (String) -> Unit,
+    onLogin: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize().testTag(Tags.RESULT_LIST),
@@ -141,7 +142,7 @@ fun SearchScreen(
         }
 
         state.error?.let { error ->
-            item(key = "error") { ErrorCard(error, onRetry = onSearch) }
+            item(key = "error") { ErrorCard(error, onRetry = onSearch, onLogin = onLogin) }
         }
 
         state.post?.let { post ->
@@ -191,19 +192,31 @@ private fun ClipboardCard(link: String, onAccept: () -> Unit, onDismiss: () -> U
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ErrorCard(error: AppError, onRetry: () -> Unit) {
+private fun ErrorCard(error: AppError, onRetry: () -> Unit, onLogin: () -> Unit) {
+    // «Нужен вход» и «нет видео» — не ошибки приложения, поэтому спокойный цвет.
+    val calm = error == AppError.NoVideo || Messages.canLogin(error)
     Card(
         modifier = Modifier.fillMaxWidth().testTag(Tags.ERROR),
         colors = CardDefaults.cardColors(
-            containerColor = if (error == AppError.NoVideo) MaterialTheme.colorScheme.secondaryContainer
+            containerColor = if (calm) MaterialTheme.colorScheme.secondaryContainer
             else MaterialTheme.colorScheme.errorContainer,
         ),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(Messages.text(error), style = MaterialTheme.typography.bodyLarge)
-            if (Messages.canRetrySearch(error)) {
-                OutlinedButton(onClick = onRetry, modifier = Modifier.testTag(Tags.RETRY_SEARCH)) { FitText("Повторить") }
+            Messages.hint(error)?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (Messages.canLogin(error)) {
+                    Button(onClick = onLogin, modifier = Modifier.testTag(Tags.LOGIN_FROM_ERROR)) { FitText("Войти в X") }
+                }
+                if (Messages.canRetrySearch(error)) {
+                    OutlinedButton(onClick = onRetry, modifier = Modifier.testTag(Tags.RETRY_SEARCH)) { FitText("Повторить") }
+                }
             }
         }
     }

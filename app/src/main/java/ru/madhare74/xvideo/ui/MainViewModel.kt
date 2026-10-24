@@ -21,7 +21,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.madhare74.xvideo.data.LookupResult
 import ru.madhare74.xvideo.data.PostRepository
+import ru.madhare74.xvideo.data.InMemorySessionStore
 import ru.madhare74.xvideo.data.SizeProbe
+import ru.madhare74.xvideo.data.XSession
+import ru.madhare74.xvideo.domain.Messages
 import ru.madhare74.xvideo.domain.AppError
 import ru.madhare74.xvideo.domain.Post
 import ru.madhare74.xvideo.domain.PostVideo
@@ -49,6 +52,8 @@ data class MainUiState(
     val tab: Tab = Tab.Search,
     /** Записи истории, файлы которых удалены вне приложения. */
     val missingFiles: Set<String> = emptySet(),
+    /** Выполнен ли вход в аккаунт X. */
+    val loggedIn: Boolean = false,
 )
 
 sealed interface UiEvent {
@@ -62,9 +67,10 @@ class MainViewModel(
     private val scheduler: DownloadScheduler,
     private val history: HistoryStore,
     private val files: MediaFiles,
+    private val session: XSession = XSession(InMemorySessionStore()),
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(MainUiState())
+    private val _state = MutableStateFlow(MainUiState(loggedIn = session.isLoggedIn))
     val state: StateFlow<MainUiState> = _state.asStateFlow()
 
     val downloads: StateFlow<Map<String, DownloadState>> =
@@ -74,6 +80,23 @@ class MainViewModel(
 
     private val _events = MutableSharedFlow<UiEvent>(extraBufferCapacity = 4)
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            session.cookies.collect { cookies -> _state.update { it.copy(loggedIn = cookies != null) } }
+        }
+    }
+
+    /** Вход выполнен: если поиск остановился на «нужен вход», повторяем его. */
+    fun onLoggedIn() {
+        val error = _state.value.error
+        if (session.isLoggedIn && error != null && Messages.canLogin(error) && _state.value.input.isNotBlank()) search()
+    }
+
+    fun logout() {
+        session.logout()
+        _events.tryEmit(UiEvent.Message("Вы вышли из аккаунта X"))
+    }
 
     private var searchJob: Job? = null
     private var lastOfferedClipboard: String? = null
@@ -195,9 +218,10 @@ class MainViewModel(
         private val scheduler: DownloadScheduler,
         private val history: HistoryStore,
         private val files: MediaFiles,
+        private val session: XSession,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            MainViewModel(repository, sizeProbe, scheduler, history, files) as T
+            MainViewModel(repository, sizeProbe, scheduler, history, files, session) as T
     }
 }

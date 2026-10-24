@@ -38,6 +38,13 @@
             </intent-filter>
         </activity>
 
+        <!-- Вход в аккаунт X (необязательный): страница входа x.com внутри приложения. -->
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:label="Вход в X"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- Фоновое скачивание WorkManager в виде foreground-сервиса (Android 14+ требует тип). -->
         <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"

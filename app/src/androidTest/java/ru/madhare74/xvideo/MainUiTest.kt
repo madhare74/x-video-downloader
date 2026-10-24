@@ -18,6 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.madhare74.xvideo.data.PostRepository
+import ru.madhare74.xvideo.data.ShortLinkResolver
 import ru.madhare74.xvideo.domain.AppError
 import ru.madhare74.xvideo.domain.Messages
 import ru.madhare74.xvideo.ui.MainViewModel
@@ -121,6 +122,60 @@ class MainUiTest {
         launch(TestData.repository(TestData.syndication("synd_tombstone_protected.json")))
         search(NASA_LINK)
         composeRule.onNodeWithText(Messages.text(AppError.Restricted)).assertIsDisplayed()
+        composeRule.onNodeWithTag(Tags.LOGIN_FROM_ERROR).assertIsDisplayed()
+    }
+
+    @Test
+    fun loginRetriesSearchWithAccount() {
+        val session = fakeSession(loggedIn = false)
+        val auth = TestData.byId(NASA_ID to "gql_video.json")
+        val repository = PostRepository(
+            TestData.syndication("synd_tombstone_age.json"), null, ShortLinkResolver { null }, auth, { session.isLoggedIn },
+        )
+        val vm = viewModel(repository, session = session)
+        composeRule.setContent { XTheme { XApp(vm, readClipboard = { null }) } }
+        search(NASA_LINK)
+        composeRule.onNodeWithTag(Tags.LOGIN_FROM_ERROR).assertIsDisplayed()
+
+        // Вход выполнен (как после окна «Вход в X») — поиск повторяется сам.
+        composeRule.runOnIdle {
+            session.login(ru.madhare74.xvideo.data.XCookies("0123456789abcdef0123456789abcdef01234567", null))
+            vm.onLoggedIn()
+        }
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(Tags.AUTHOR).assertIsDisplayed()
+        composeRule.onNodeWithText("@NASA").assertIsDisplayed()
+    }
+
+    @Test
+    fun restrictedForAccountMessage() {
+        val session = fakeSession(loggedIn = true)
+        val repository = PostRepository(
+            TestData.syndication("synd_tombstone_age.json"), null, ShortLinkResolver { null },
+            TestData.byId(NASA_ID to "gql_age.json"), { session.isLoggedIn },
+        )
+        launchWith(viewModel(repository, session = session))
+        search(NASA_LINK)
+        composeRule.onNodeWithText(Messages.text(AppError.RestrictedForAccount)).assertIsDisplayed()
+        composeRule.onNodeWithTag(Tags.LOGIN_FROM_ERROR).assertDoesNotExist()
+    }
+
+    @Test
+    fun accountMenuLogout() {
+        val session = fakeSession(loggedIn = true)
+        launchWith(viewModel(TestData.repository(sources), session = session))
+        composeRule.onNodeWithTag(Tags.ACCOUNT).performClick()
+        composeRule.onNodeWithText("Вход в X выполнен").assertIsDisplayed()
+        composeRule.onNodeWithTag(Tags.ACCOUNT_LOGOUT).performClick()
+        composeRule.waitForIdle()
+        assertEquals(false, session.isLoggedIn)
+        composeRule.onNodeWithTag(Tags.ACCOUNT).performClick()
+        composeRule.onNodeWithTag(Tags.ACCOUNT_LOGIN).assertIsDisplayed()
+    }
+
+    private fun launchWith(vm: MainViewModel) {
+        composeRule.setContent { XTheme { XApp(vm, readClipboard = { null }) } }
+        composeRule.waitForIdle()
     }
 
     @Test

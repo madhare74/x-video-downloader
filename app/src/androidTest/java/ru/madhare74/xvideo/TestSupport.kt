@@ -15,6 +15,9 @@ import ru.madhare74.xvideo.data.GuestApiParser
 import ru.madhare74.xvideo.data.PostRepository
 import ru.madhare74.xvideo.data.PostSource
 import ru.madhare74.xvideo.data.ShortLinkResolver
+import ru.madhare74.xvideo.data.InMemorySessionStore
+import ru.madhare74.xvideo.data.XCookies
+import ru.madhare74.xvideo.data.XSession
 import ru.madhare74.xvideo.data.SyndicationParser
 import ru.madhare74.xvideo.download.DownloadRequest
 import ru.madhare74.xvideo.download.DownloadScheduler
@@ -72,7 +75,12 @@ fun viewModel(
     scheduler: DownloadScheduler = FakeScheduler(),
     history: HistoryStore = TestData.tempHistory(),
     files: MediaFiles = FakeFiles(),
-) = MainViewModel({ repository }, null, scheduler, history, files)
+    session: XSession = XSession(InMemorySessionStore()),
+) = MainViewModel({ repository }, null, scheduler, history, files, session)
+
+/** Подставная сессия X для тестов — к X не обращается. */
+fun fakeSession(loggedIn: Boolean) =
+    XSession(InMemorySessionStore(if (loggedIn) XCookies("0123456789abcdef0123456789abcdef01234567", "abcdef0123456789abcdef") else null))
 
 const val NASA_LINK = "https://x.com/NASA/status/1849012345678901234"
 const val NASA_ID = "1849012345678901234"
