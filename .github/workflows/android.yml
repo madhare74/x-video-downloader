@@ -122,8 +122,6 @@ jobs:
             sleep 3
             adb shell am instrument -w -e class ru.madhare74.xvideo.SystemFontScreenshotTest ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
             adb shell settings put system font_scale 1.0 >> app/build/shots.log 2>&1 || true
-            # Диагностика входа в X: настоящая страница x.com во встроенном браузере.
-            adb shell am instrument -w -e probe true -e class ru.madhare74.xvideo.LoginWebProbe ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/shots.log 2>&1 || true
             mkdir -p app/build/screenshots
             adb exec-out run-as ru.madhare74.xvideo tar -c files/screenshots > app/build/shots.tar 2>> app/build/shots.log || true
             tar -xf app/build/shots.tar -C app/build/screenshots --strip-components=2 >> app/build/shots.log 2>&1 || true
@@ -153,3 +151,59 @@ jobs:
           git add .
           git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "UI tests ${GITHUB_SHA::7}"
           git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ui-test-results
+
+  login-probe:
+    name: Диагностика входа в X (Android 15)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Включить KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Собрать тестовые APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --stacktrace assembleDebug assembleDebugAndroidTest
+
+      - name: Открыть страницу входа X на Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            mkdir -p app/build/probe
+            adb shell dumpsys webviewupdate > app/build/probe/webview.txt 2>&1 || true
+            adb install -r app/build/outputs/apk/debug/app-debug.apk > app/build/probe/run.log 2>&1 || true
+            adb install -r -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk >> app/build/probe/run.log 2>&1 || true
+            adb shell am instrument -w -e probe true -e class ru.madhare74.xvideo.LoginWebProbe ru.madhare74.xvideo.test/androidx.test.runner.AndroidJUnitRunner >> app/build/probe/run.log 2>&1 || true
+            adb exec-out run-as ru.madhare74.xvideo tar -c files/screenshots > app/build/probe/shots.tar 2>> app/build/probe/run.log || true
+            tar -xf app/build/probe/shots.tar -C app/build/probe --strip-components=2 >> app/build/probe/run.log 2>&1 || true
+            rm -f app/build/probe/shots.tar
+
+      - name: Опубликовать в ветку login-probe
+        if: always() && github.event_name != 'pull_request'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out && cp -r app/build/probe/. out/ || true
+          echo "${GITHUB_SHA}" > out/COMMIT
+          cd out
+          git init -q -b login-probe
+          git add .
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "probe ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" login-probe
