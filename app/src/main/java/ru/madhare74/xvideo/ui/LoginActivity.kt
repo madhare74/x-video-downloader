@@ -17,13 +17,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
@@ -45,6 +48,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -113,6 +117,11 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
         }
     }
 
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("login_ui", android.content.Context.MODE_PRIVATE) }
+    // Подсказка открывается сама при первом входе, потом — по кнопке «?».
+    var help by remember { mutableStateOf(!prefs.getBoolean("help_shown", false)) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -123,22 +132,18 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
                     }
                 },
                 actions = {
+                    IconButton(onClick = { help = true }, modifier = Modifier.testTag(Tags.LOGIN_HELP)) {
+                        Icon(Icons.Default.Info, contentDescription = "Как войти")
+                    }
                     TextButton(onClick = { manual = true }, modifier = Modifier.testTag(Tags.LOGIN_MANUAL)) {
-                        FitText("Ввести токен")
+                        FitText("Токен")
                     }
                 },
             )
         },
     ) { padding ->
-        Column(Modifier.fillMaxSize().padding(padding)) {
-            Surface(color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    "Войдите по логину, телефону или почте и паролю X. Пароль вводится на странице X, " +
-                        "приложение его не видит. Вход через Google или Apple здесь может не работать.",
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-            }
+        // imePadding: страница X сжимается над клавиатурой, и поле ввода остаётся видно.
+        Column(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding).imePadding()) {
             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth())
             Box(Modifier.fillMaxSize()) {
                 LoginWebView(
@@ -161,6 +166,13 @@ private fun LoginScreen(onCookies: (XCookies) -> Unit, onBack: () -> Unit) {
                 }
             }
         }
+    }
+
+    if (help) {
+        LoginHelpDialog(onDismiss = {
+            help = false
+            prefs.edit().putBoolean("help_shown", true).apply()
+        })
     }
 
     if (manual) {
@@ -190,6 +202,11 @@ private fun LoginWebView(
                 settings.domStorageEnabled = true
                 // X не пускает «встроенные браузеры»: убираем пометку WebView из User-Agent.
                 settings.userAgentString = settings.userAgentString.replace("; wv", "")
+                // Автозаполнение логина и пароля: Google, Samsung Pass или другая служба,
+                // выбранная в настройках телефона, предлагает сохранённый пароль от X.
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    importantForAutofill = android.view.View.IMPORTANT_FOR_AUTOFILL_YES
+                }
                 CookieManager.getInstance().setAcceptCookie(true)
                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
                 webViewClient = object : WebViewClient() {
@@ -213,6 +230,40 @@ private fun LoginWebView(
             }
         },
         onRelease = { it.destroy() },
+    )
+}
+
+/** Как войти: по шагам, с подсказкой про автозаполнение паролей. */
+@Composable
+internal fun LoginHelpDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        modifier = Modifier.testTag(Tags.LOGIN_HELP_DIALOG),
+        title = { FitText("Как войти в X") },
+        text = {
+            Column(
+                Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text("1. На странице X введите ник (без @), телефон или почту от аккаунта X и нажмите «Далее».")
+                Text("2. Введите пароль от X и нажмите «Войти».")
+                Text("3. Если X пришлёт код подтверждения — введите код из SMS или письма.")
+                Text("4. После входа окно закроется само, и поиск видео повторится.")
+                Text(
+                    "Сохранённый пароль: нажмите на поле ввода — над клавиатурой появится подсказка Google " +
+                        "или Samsung Pass. Если её нет: Настройки телефона → Общие настройки → Пароли и " +
+                        "автозаполнение → Служба автозаполнения → выберите Samsung Pass или Google.",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    "Кнопки «Войти через Google» и «Войти через Apple» здесь могут не работать. " +
+                        "Пароль вводится на странице X, приложение его не видит.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { FitText("Понятно") } },
     )
 }
 
@@ -254,7 +305,7 @@ fun ManualTokenDialog(onDismiss: () -> Unit, onSave: (XCookies) -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    "Если страница входа не открывается: войдите в x.com в Chrome на компьютере, откройте " +
+                    "Только если страница входа не открывается: войдите в x.com в Chrome на компьютере, откройте " +
                         "«Инструменты разработчика» (F12) → «Application» → «Cookies» → https://x.com и " +
                         "скопируйте значение auth_token.",
                     style = MaterialTheme.typography.bodySmall,

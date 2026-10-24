@@ -59,6 +59,8 @@ object Tags {
     const val ACCOUNT_STATUS = "account_status"
     const val LOGIN_MANUAL = "login_manual"
     const val LOGIN_ERROR = "login_error"
+    const val LOGIN_HELP = "login_help"
+    const val LOGIN_HELP_DIALOG = "login_help_dialog"
     const val LOGIN_RETRY = "login_retry"
     const val LOGIN_TOKEN_INPUT = "login_token_input"
     const val LOGIN_TOKEN_SAVE = "login_token_save"

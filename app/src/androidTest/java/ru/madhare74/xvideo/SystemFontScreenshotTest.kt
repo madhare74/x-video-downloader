@@ -69,6 +69,11 @@ class SystemFontScreenshotTest {
         saveScreen("login_page_error_dark")
     }
 
+    @Test fun login_help_light() {
+        composeRule.setContent { XTheme(darkTheme = false) { ru.madhare74.xvideo.ui.LoginHelpDialog(onDismiss = {}) } }
+        saveScreen("login_help_light")
+    }
+
     @Test fun login_needed_light() {
         val session = fakeSession(false)
         val repository = PostRepository(
